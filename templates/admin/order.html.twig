@@ -1,0 +1,550 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}DJ SHOP - Commandes{% endblock %}
+
+{% block body %}
+{% block javascripts %}
+<script src="{{ asset('js/transaction.js')}}"></script>
+{% endblock %}
+<div class="dashboard">
+  
+    <div class="containerDashboard">
+        <div class="dashFilter">
+            <h1 class="h1TitleStock " style="padding-top: 50px;">Liste des commandes</h1>
+            <div class="filterContainer">
+
+
+                <div id="goodTransactionBtn" class="filterCard" onclick="goodTransaction()"><i class="fa-solid fa-list-check"></i>
+                    <p>Console a expedié</p>
+                </div>
+                <div id="refundTransactionBtn" class="filterCard" onclick="refundTransaction()"><i
+                        class="fa-solid fa-money-check-dollar"></i>
+                    <p>Console a remboursez</p>
+                </div>
+                <div id="cancelTransactionBtn" class="filterCard" onclick="cancelTransaction()"><i class="fa-solid fa-list"></i>
+                    <p>Vente annulez</p>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+      <div class="containerDashboardResponsive">
+        <h1 class="h1TitleResponsive" >Liste des commandes</h1>
+        <div class="filterContainerResponsive">
+
+
+            <div id="goodTransactionBtnResponsive" class="filterCardResponsive" onclick="goodTransactionResponsive()"><i class="fa-solid fa-list-check"></i>
+                 <p>Console a expedié</p>
+            </div>
+            <div id="refundTransactionBtnResponsive" class="filterCardResponsive" onclick="refundTransactionResponsive()"><i
+                        class="fa-solid fa-money-check-dollar"></i>
+                <p>Console a remboursez</p>
+            </div>
+            <div id="cancelTransactionBtnResponsive" class="filterCardResponsive" onclick="cancelTransactionResponsive()"><i class="fa-solid fa-list"></i>
+                <p>Vente annulez</p>
+            </div>
+        </div>
+    </div>
+ 
+    <div class="dashboardContainerList">
+        <div class="errorsListOrder">
+            {% for level, messages in app.flashes %}
+            {% for message in messages %}
+            <div class="alert text-center col-6 alert-{{ level }}">
+                {{ message|raw }}
+            </div>
+            {% endfor %}
+            {% endfor %}
+        </div>
+        <div class="dashList" id="goodTransaction">
+            {% if countWaiting == 0 %}
+
+            <div class="emptyListAdmin">
+                <h1>Vous n'avez aucune commande </h1>
+            </div>
+            {% else %}
+            <div class="itemsTh">
+                <div class="th thNumber">Numéro de commande</div>
+                <div class="th thProductsName">Nom des Produits</div>
+                <div class="th thNumberProducts">Nombre de Produit</div>
+                <div class="th thTotal">Prix Total</div>
+                <div class="th thStatus">Etats de la livraison</div>
+            </div>
+            {% for order in orders %}
+            {% if order.shippingStatus != "cancel" %}
+            {% if order.shippingStatus != "refund" %}
+            {% set orderId = order.id %}
+            {% set productsNbr = order.products|split('/') %}
+            
+          
+            <div class="items" >
+                <script>
+                    var showOrder = function (value, object) {
+                        document.getElementById(object).style.display = value;
+                    };
+                </script>
+                <div style="cursor: pointer;" onclick="showOrder('flex','orderWaiting#{{order.id}}');" class="td tdNumber">{{order.orderName}}</div>
+                <div style="cursor: pointer;" onclick="showOrder('flex','orderWaiting#{{order.id}}');" class="td tdProductsName" >{{order.products|slice(0,40)}}...</div>
+                <div style="cursor: pointer;" onclick="showOrder('flex','orderWaiting#{{order.id}}');" class="td tdNumberProducts">{{productsNbr|length}}</div>
+                <div style="cursor: pointer;" onclick="showOrder('flex','orderWaiting#{{order.id}}');" class="td tdTotal">{{order.total}} €</div>
+                    {% if order.shippingStatus == "waiting" %}
+                <div class="td tdStatus StatusSuivi">
+
+                    {# Script Js pour cibler correctement le bon formulaire a ouvrir. (Probleme rencontré peut importe
+                    sur quel boutonde la liste je cliqué cela m'ouvrez le premier formulaire car ils ont tous le meme
+                    nom d'id) #}
+
+
+
+                    <button onclick="addSuivi('block','{{order.id}}');" class="suiviBtn suiviBtnSuivi">N° Suivi</button>
+                    <button onclick="addRefund('block','refund{{order.id}}');" class="suiviBtn suiviBtnCancel">Annulez</button>
+                    <script>
+                        var addSuivi = function (value, object) {
+                            document.getElementById(object).style.display = value;
+                        };
+                        var addRefund = function (value, object) {
+                            document.getElementById(object).style.display = value;
+                        };
+                    </script>
+
+
+
+                    <div id="{{order.id}}" style="display:none;">
+                        <div class="containerAllScreen">
+                            <div class="form">
+                                <i id="iconClose" onclick="closeSuiviForm('none','{{order.id}}');"
+                                    class="fa-solid fa-xmark" style="color: white; font-size:25px;cursor:pointer;"></i>
+                                <script>
+                                    var closeSuiviForm = function (value, object) {
+                                        document.getElementById(object).style.display = value;
+                                    };
+                                </script>
+                                <form method="POST" class="formAdd">
+                                    <input type="hidden" name="suiviForm" value="submited">
+                                    <input type="text" id="suivi" name="suivi" placeholder="Numéro de suivi">
+                                    <input type="hidden" name="orderId" value="{{ order.id }}">
+                                       <div class="btnFormContact btnFormContactSuivi">
+     
+                <button type="submit" class="btnAnim">
+                    <div class="btnTextFormContact">
+                        Envoyez <i class="fa-solid fa-paper-plane"></i>
+                    </div>
+                </button>
+            </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="refund{{order.id}}" style="display:none;">
+                        <div class="containerAllScreen">
+                            <div class="form">
+                                <i id="iconClose" onclick="closeRefundForm('none','refund{{order.id}}');"
+                                    class="fa-solid fa-xmark" style="color: white; font-size:25px;cursor:pointer;"></i>
+                                <script>
+                                    var closeRefundForm = function (value, object) {
+                                        document.getElementById(object).style.display = value;
+                                    };
+                                </script>
+                                <form method="POST" class="formAdd">
+                                    <input type="hidden" name="cancelRefundForm" value="submited">
+                                    <input type="text" name="cancelRefund" id="cancelRefund" placeholder="Raison de l'annulation">
+                        
+
+                       
+                                    <input type="hidden" name="orderId" value="{{ order.id }}">
+                                    <div class="btnFormContact btnFormContactSuivi">
+     
+                <button type="submit" class="btnAnim">
+                    <div class="btnTextFormContact">
+                        Envoyez <i class="fa-solid fa-paper-plane"></i>
+                    </div>
+                </button>
+            </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                    {% else %}
+                <div class="td tdStatus">
+                    <div>Suivi : {{order.shippingStatus}}</div>
+                </div>
+                    {% endif %}
+            </div>
+            {% endif %}
+            {% endif %}
+            <div id="orderWaiting#{{order.id}}" style="display:none;" class="showOrderAbsolute"
+                onclick="closeSuiviForm('none','order#{{order.id}}');">
+                <div class="orderShow">
+                    <i id="iconCloseUser" onclick="closeSuiviForm('none','orderWaiting#{{order.id}}');"
+                        class="fa-solid fa-xmark"></i>
+                    <script>
+                        var closeSuiviForm = function (value, object) {
+                            document.getElementById(object).style.display = value;
+                        };
+                    </script>
+                    <div class="cartCards deliveryCard ">
+                        <div class="label deliveryLabel">Récapitulatif de la commande</div>
+
+                    </div>
+                    <div class="cardsLabel mt-5">
+                        Livraison
+                    </div>
+                    <div class="cartCards adressCards">
+
+                        <div class="contentPaypal">
+
+
+                            <div class="adress">
+                                <i
+                                    class="fa-solid fa-house-chimney-user"></i><span>{{order.firstname}} {{order.lastname}}</span><span>{{order.adress}}</span><span>{{order.postal}}</span><span>{{order.city}}</span>
+                            </div>
+                            <div class="phone">
+                                <i class="fa-solid fa-phone"></i><span>{{order.phone}}</span>
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <div class="cardsLabelProducts">
+                        Produits
+                    </div>
+
+                    <div class="cartCards">
+                        {% set orderIds = order.productsId|split('/') %}
+                        {% for orderId in orderIds %}
+                        {% for xbox in xboxs %}
+                        {% if orderId == xbox.Id %}
+                        <div class="contentPaypalProduct">
+                            <div class="picture">
+                                {% set pictures = xbox.picture|split('_') %}
+                                <img src="{{ asset(pictures.0)}}" alt="{{ xbox.title}}">
+                            </div>
+                            <div class="text">
+                                <div class="titleXboxPaypal">{{xbox.title}}</div>
+                                <div class="description">{{xbox.description}}</div>
+                            </div>
+                            <div class="price">{{xbox.price}} €</div>
+
+
+
+                        </div>
+
+                        {% endif %}
+                        {% endfor %}
+                        {% endfor %}
+                    </div>
+
+                    <div class="cartCards totalCard">
+                        <div class="label totalLabel">
+                            {% set orderIds = order.productsId|split('/') %}
+                            {% if orderIds|length != 1 %}
+
+                            {{orderIds|length}} Consoles : <span> {{order.total}} € </span>
+                            {% else %}
+                            {{orderIds|length}} Console : <span> {{order.total}} € </span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+
+
+
+                </div>
+            </div>
+            
+            
+            
+            {% endfor %}
+            {% endif %}
+           
+        </div>
+        <div class="dashList" id="refundTransaction" style="display: none!important;">
+         
+            {% if countRefund == 0 %}
+
+            <div class="emptyListAdmin">
+                <h1>Vous n'avez aucune commande a remboursé</h1>
+            </div>
+            {% else %}
+            <div class="itemsTh">
+                <div class="th thNumber">Numéro de commande</div>
+                <div class="th thProductsName">Nom des Produits</div>
+                <div class="th thNumberProducts">Nombre de Produit</div>
+                <div class="th thTotal">Prix Total</div>
+                <div class="th thStatus">Etats de la livraison</div>
+            </div>
+            {% for order in orders %}
+            {% if order.shippingStatus == "refund"  %}
+
+            {% set orderId = order.id %}
+            {% set productsNbr = order.products|split('/') %}
+    
+           
+            <div class="items" >
+                <script>
+                    var showOrder = function (value, object) {
+                        document.getElementById(object).style.display = value;
+                    };
+                </script>
+                <div style="cursor: pointer;" onclick="showOrder('flex','orderRefund#{{order.id}}');" class="td tdNumber">{{order.orderName}}</div>
+                <div style="cursor: pointer;" onclick="showOrder('flex','orderRefund#{{order.id}}');" class="td tdProductsName" >{{order.products|slice(0,40)}}...</div>
+                <div style="cursor: pointer;" onclick="showOrder('flex','orderRefund#{{order.id}}');" class="td tdNumberProducts">{{productsNbr|length}}</div>
+                <div style="cursor: pointer;" onclick="showOrder('flex','orderRefund#{{order.id}}');" class="td tdTotal">{{order.total}} €</div>
+                <div class="td tdStatus">
+
+
+                    {# Script Js pour cibler correctement le bon formulaire a ouvrir. (Probleme rencontré peut importe
+                    sur quel boutonde la liste je cliqué cela m'ouvrez le premier formulaire car ils ont tous le meme
+                    nom d'id) #}
+
+
+
+                    <button class="refundBtn" onclick="addRefund('block','refund{{order.id}}');">Remboursez la commande</button>
+                    <script>
+                        var addRefund = function (value, object) {
+                            document.getElementById(object).style.display = value;
+                        };
+                    </script>
+
+
+
+                    <div id="refund{{order.id}}" style="display:none;">
+                        <div class="containerAllScreen">
+                            <div class="form">
+
+                                <i id="iconClose" onclick="closeRefund('none','refund{{order.id}}');"
+                                    class="fa-solid fa-xmark" style="color: white; font-size:25px;cursor:pointer;"></i>
+                                <script>
+                                    var closeRefund = function (value, object) {
+                                        document.getElementById(object).style.display = value;
+                                    };
+                                </script>
+                                <form method="POST" class="formAdd">
+                                    <input type="hidden" name="refundForm" value="submited">
+                                    <label for="refund">Entrez le N° de transaction Paypal</label>
+                                    <input type="text" id="refund" name="refund">
+                                    <input type="hidden" name="orderId" value="{{ order.id }}">
+                                    <button type="submit">Validez</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+ 
+         
+          
+            {% endif %}
+           
+            <div id="orderRefund#{{order.id}}" style="display:none;" class="showOrderAbsolute"
+            onclick="closeSuiviForm('none','order#{{order.id}}');">
+            <div class="orderShow">
+                <i id="iconCloseUser" onclick="closeSuiviForm('none','orderRefund#{{order.id}}');"
+                    class="fa-solid fa-xmark"></i>
+                <script>
+                    var closeSuiviForm = function (value, object) {
+                        document.getElementById(object).style.display = value;
+                    };
+                </script>
+                <div class="cartCards deliveryCard ">
+                    <div class="label deliveryLabel">Récapitulatif de la commande</div>
+
+                </div>
+                <div class="cardsLabel mt-5">
+                    Livraison
+                </div>
+                <div class="cartCards adressCards">
+
+                    <div class="contentPaypal">
+
+
+                        <div class="adress">
+                            <i
+                                class="fa-solid fa-house-chimney-user"></i><span>{{order.adress}}</span><span>{{order.postal}}</span><span>{{order.city}}</span>
+                        </div>
+                        <div class="phone">
+                            <i class="fa-solid fa-phone"></i><span>{{order.phone}}</span>
+                        </div>
+
+
+                    </div>
+                </div>
+                <div class="cardsLabelProducts">
+                    Produits
+                </div>
+
+                <div class="cartCards">
+                    {% set orderIds = order.productsId|split('/') %}
+                    {% for orderId in orderIds %}
+                    {% for xbox in xboxs %}
+                    {% if orderId == xbox.Id %}
+                    <div class="contentPaypalProduct">
+                        <div class="picture">
+                            {% set pictures = xbox.picture|split('_') %}
+                            <img src="{{ asset(pictures.0)}}" alt="{{ xbox.title}}">
+                        </div>
+                        <div class="text">
+                            <div class="titleXboxPaypal">{{xbox.title}}</div>
+                            <div class="description">{{xbox.description}}</div>
+                        </div>
+                        <div class="price">{{xbox.price}} €</div>
+
+
+
+                    </div>
+
+                    {% endif %}
+                    {% endfor %}
+                    {% endfor %}
+                </div>
+
+                <div class="cartCards totalCard">
+                    <div class="label totalLabel">
+                        {% set orderIds = order.productsId|split('/') %}
+                        {% if orderIds|length != 1 %}
+
+                        {{orderIds|length}} Consoles : <span> {{order.total}} € </span>
+                        {% else %}
+                        {{orderIds|length}} Console : <span> {{order.total}} € </span>
+                        {% endif %}
+                    </div>
+                </div>
+
+
+
+
+            </div>
+        </div>
+        {% endfor %}
+            {% endif %}
+
+
+        </div>
+        <div class="dashList" id="cancelTransaction" style="display: none!important;">
+            {% if countCancel == 0 %}
+          
+            <div class="emptyListAdmin">
+                <h1>Vous n'avez aucune commande d'annulez</h1>
+            </div>
+            {% else %}
+            
+            <div class="itemsTh">
+                <div class="th thNumber">Numéro de commande</div>
+                <div class="th thProductsName">Nom des Produits</div>
+                <div class="th thNumberProducts">Nombre de Produit</div>
+                <div class="th thTotal">Prix Total</div>
+                <div class="th thStatus">Etats de la livraison</div>
+            </div>
+            {% for order in orders %}
+            {% if order.shippingStatus == "cancel"  %}
+
+            {% set orderId = order.id %}
+            {% set productsNbr = order.products|split('/') %}
+    
+      
+            <div class="items" >
+                <script>
+                    var showOrder = function (value, object) {
+                        document.getElementById(object).style.display = value;
+                    };
+                </script>
+                <div style="cursor: pointer;" onclick="showOrder('flex','orderCancel#{{order.id}}');" class="td tdNumber">{{order.orderName}}</div>
+                <div style="cursor: pointer;" onclick="showOrder('flex','orderCancel#{{order.id}}');" class="td tdProductsName" >{{order.products|slice(0,40)}}...</div>
+                <div style="cursor: pointer;" onclick="showOrder('flex','orderCancel#{{order.id}}');" class="td tdNumberProducts">{{productsNbr|length}}</div>
+                <div style="cursor: pointer;" onclick="showOrder('flex','orderCancel#{{order.id}}');" class="td tdTotal">{{order.total}} €</div>
+                <div class="td tdStatusCancel">Annulez</div>
+               
+            </div>
+         
+            {% endif %}
+          
+            <div id="orderCancel#{{order.id}}" style="display:none;" class="showOrderAbsolute"
+                onclick="closeSuiviForm('none','order#{{order.id}}');">
+                <div class="orderShow">
+                    <i id="iconCloseUser" onclick="closeSuiviForm('none','orderCancel#{{order.id}}');"
+                        class="fa-solid fa-xmark"></i>
+                    <script>
+                        var closeSuiviForm = function (value, object) {
+                            document.getElementById(object).style.display = value;
+                        };
+                    </script>
+                    <div class="cartCards deliveryCard ">
+                        <div class="label deliveryLabel">Récapitulatif de la commande</div>
+
+                    </div>
+                    <div class="cardsLabel mt-5">
+                        Livraison
+                    </div>
+                    <div class="cartCards adressCards">
+
+                        <div class="contentPaypal">
+
+
+                            <div class="adress">
+                                <i
+                                    class="fa-solid fa-house-chimney-user"></i><span>{{order.adress}}</span><span>{{order.postal}}</span><span>{{order.city}}</span>
+                            </div>
+                            <div class="phone">
+                                <i class="fa-solid fa-phone"></i><span>{{order.phone}}</span>
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <div class="cardsLabelProducts">
+                        Produits
+                    </div>
+
+                    <div class="cartCards">
+                        {% set orderIds = order.productsId|split('/') %}
+                        {% for orderId in orderIds %}
+                        {% for xbox in xboxs %}
+                        {% if orderId == xbox.Id %}
+                        <div class="contentPaypalProduct">
+                            <div class="picture">
+                                {% set pictures = xbox.picture|split('_') %}
+                                <img src="{{ asset(pictures.0)}}" alt="{{ xbox.title}}">
+                            </div>
+                            <div class="text">
+                                <div class="titleXboxPaypal">{{xbox.title}}</div>
+                                <div class="description">{{xbox.description}}</div>
+                            </div>
+                            <div class="price">{{xbox.price}} €</div>
+
+
+
+                        </div>
+
+                        {% endif %}
+                        {% endfor %}
+                        {% endfor %}
+                    </div>
+
+                    <div class="cartCards totalCard">
+                        <div class="label totalLabel">
+                            {% set orderIds = order.productsId|split('/') %}
+                            {% if orderIds|length != 1 %}
+
+                            {{orderIds|length}} Consoles : <span> {{order.total}} € </span>
+                            {% else %}
+                            {{orderIds|length}} Console : <span> {{order.total}} € </span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+
+
+
+                </div>
+            </div>
+            {% endfor %}
+            {% endif %}
+
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

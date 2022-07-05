@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}DJ SHOP - Commande Annulez{% endblock %}
+{% block body %}
+
+
+
+
+
+    <div class="container containerSuccessPaypal">
+        <div class="successContainerStyle">
+                <div class="successContainer">
+                    <h1> Commande annulez</h1>
+                    <div class="textSuccess">
+                        <p>Une erreur est survenue, le paiement Paypal n'a pas pu être éffectué pour une raison inconnue .</p>
+                        <p> Vous pouvez retrouvez vos articles toujours garder dans votre <a href="{{ path('app_cart') }}"> Panier</a> </p>
+                    </div>
+             
+                </div>
+        </div>
+    </div>
+
+
+{% endblock %}

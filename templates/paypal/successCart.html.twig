@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}DJ SHOP - Commande
+	{{orderName}}
+{% endblock %}
+{% block body %}
+	{% block cart %}{% endblock cart %}
+
+
+	<div class="container containerSuccessPaypal">
+		<div class="successContainerStyle">
+			{% if status == 'denied'%}
+
+				<div class="successContainer">
+					<h1>
+						Commande annulez</h1>
+					<div class="textSuccess">
+						<p>Une erreur est survenue, le paiement Paypal n'a pas pu être éffectué pour une raison inconnue .</p>
+						<p>
+							Vous pouvez retrouvez vos articles toujours garder dans votre
+							<a href="{{ path('app_cart') }}">
+								Panier</a>
+						</p>
+					</div>
+
+				</div>
+			{% elseif status == 'granted' %}
+
+				<div class="successContainer">
+					<h1>
+						Confirmation de la commande
+						{{orderName}}</h1>
+					<div class="textSuccess">
+						<p>Nous vous confirmons que la commande a bien étais pris en compte, et que la livraison s'effectuera dans les 48h. Une fois la commande expedié Vous recevrez un mail avec le numero de suivi pour pouvoir suivre l'etat de la livraison. Tout annulation est possible avant l'expedition nous vous invitions a voir nos modalites de remboursement
+						</p>
+						<p>
+							Vous pouvez suivre l'etat de votre commande sur la page
+							<a href="{{ path('order') }}">
+								Mes Commande</a>
+						</p>
+					</div>
+
+				</div>
+			{% endif %}
+		</div>
+	</div>
+
+
+{% endblock %}

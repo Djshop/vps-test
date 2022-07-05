@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}DJ SHOP - Mes commandes{% endblock %}
+
+{% block body %}
+
+<div class="main">
+    <div class="editPictureShow">
+
+        <div class="containerShow" style="color:white;">
+
+
+            <div class="orderFilter">
+                <p>Mes Commande en cours</p>
+                <p>Mes Demandes de remboursements</p>
+            </div>
+            <div class="orders">
+                {% if orders is not defined %}
+                <h1>Vous n'avez aucune commande</h1>
+                {% else %}
+                {% for order in orders %}
+                <h1>{{order.orderName}}</h1>
+                {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{# Role admin seulement #}
+{# <a href="{{ path('app_xbox_index') }}">back to list</a>
+
+<a href="{{ path('app_xbox_edit', {'id': xbox.id}) }}">edit</a> #}
+
+
+{# Formulaire pour envoyé l'id de l'user eau controller car le $user->getId() fonctionne mais releve une erreur sur VS
+(purement esthétique) #}
+{# {% if app.user %}
+<form id="formid" method="Post">
+    <input type="hidden" name="userId" value="{{ app.user.id}}">
+</form>
+
+<script type="text/javascript">
+    if (count = 0) {
+        
+        document.getElementById("formid").submit(); // Here formid is the id of your form
+        count++;
+        
+    }                    
+</script>
+{% endif %} #}
+
+
+{% endblock %}

@@ -1,0 +1,1 @@
+MAILER_DSN=smtp://33db64f56cc3f3:52e4449e7e9a5f@smtp.mailtrap.io:2525?encryption=tls&auth_mode=login

@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Erreur 404{% endblock %}
+{% block navbar %}
+{% endblock %}
+{% block body %}
+{% block cart %}
+{% endblock cart %}
+
+
+
+<div class="cartContainer">
+    <div class="cartPage">
+        <div class="containerCartPage">
+            <h1>Page not found error</h1>
+
+    <p>
+        The requested page couldn't be located. Checkout for any URL
+        misspelling or <a href="{{ path('home') }}">return to the homepage</a>.
+    </p>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

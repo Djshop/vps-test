@@ -1,0 +1,162 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}DJ SHOP - Configuration{% endblock %}
+
+{% block body %}
+{% block javascripts %}
+<script src="{{ asset('js/add_xbox.js')}}"></script>
+
+{% endblock %}
+
+<div class="container containerAddXbox">
+   <div class="showErrorsEdit">
+   
+   
+      {% for level, messages in app.flashes %}
+      {% for message in messages %}
+      <div class="alert alert-{{ level }} mt-5 mb-5">
+         {{ message|raw }}
+      </div>
+      {% endfor %}
+      {% endfor %}
+   </div>
+ 
+   <h1 class="h1Add">Configuration</h1>
+
+   <div class="container containerAdd">
+      <form method="POST" enctype="multipart/form-data" class="formAdd">
+         <input type="hidden" name="add_xbox" value="true">
+         <div class="column">
+            <div class="left_column">
+
+               <div class="inputAdd">
+                  <label class="labelAdd" for="title">Titre</label>
+                  <input type="text" id="title" name="title" value="{{xbox.title}}" style="width:450px;">
+               </div>
+               <div class="inputAdd">
+                  <label class="labelAdd" for="description">Description</label>
+                  <textarea type="text" id="description" name="description" >{{xbox.description}}</textarea>
+               </div>
+               <div class="inputAdd">
+                  <label class="labelAdd" for="price">Prix €</label>
+                  <input type="number" id="price" name="price" value="{{xbox.price}}" style="text-align:center ;">
+               </div>
+
+
+            </div>
+            <div class="right_column">
+               <div class="inputAdd" >
+                  <div class="xboxGenEdit">
+
+
+                     <p class="labelAdd">Génération de la console</p>
+                     {% if generationBdd == 'xboxSlim'%}
+                  
+                     <div class="xboxGenIcon">
+                        <label style="cursor: pointer;" class="custom-checkbox">
+                           <label for="xboxFat">Xbox 360 Fat</label>
+                           <input type="checkbox" id="xboxFat" name="generationFat" value="xboxFat" onclick="uncheckedSlim()">
+
+                           <img  title="xboxFat"
+                              class="icon unchecked imgFat" src="{{asset("image/fatNotSelect.png")}}" alt="">
+                           <img  title="xboxFat"
+                              class="icon checked imgFat" src="{{asset("image/fatSelect.png")}}" alt="">
+
+                        </label>
+                        <label style="cursor: pointer;" class="custom-checkbox">
+                           <label for="xboxSlim">Xbox 360 Slim</label>
+                           <input type="checkbox" id="xboxSlim" name="generationSlim" value="xboxSlim" onclick="uncheckedFat()" checked>
+
+                           <img  title="xboxSlim"
+                              class="icon unchecked imgSlim" src="{{asset("image/slimNotSelect.png")}}" alt="">
+                           <img  title="xboxSlim"
+                              class="icon checked imgSlim" src="{{asset("image/slimSelect.png")}}" alt="">
+
+                        </label>
+                     </div>
+                     {% elseif generationBdd == 'xboxFat'%}
+                     <div class="xboxGenIcon">
+                        <label style="cursor: pointer;" class="custom-checkbox">
+                           <label for="xboxFat">Xbox 360 Fat</label>
+                           <input type="checkbox" id="xboxFat" name="generationFat" value="xboxFat" onclick="uncheckedSlim()" checked>
+
+                           <img  title="xboxFat"
+                              class="icon unchecked imgFat" src="{{asset("image/fatNotSelect.png")}}" alt="">
+                           <img  title="xboxFat"
+                              class="icon checked imgFat" src="{{asset("image/fatSelect.png")}}" alt="">
+
+                        </label>
+                        <label style="cursor: pointer;" class="custom-checkbox">
+                           <label for="xboxSlim">Xbox 360 Slim</label>
+                           <input type="checkbox" id="xboxSlim" name="generationSlim" value="xboxSlim" onclick="uncheckedFat()">
+
+                           <img  title="xboxSlim"
+                              class="icon unchecked imgSlim" src="{{asset("image/slimNotSelect.png")}}" alt="">
+                           <img  title="xboxSlim"
+                              class="icon checked imgSlim" src="{{asset("image/slimSelect.png")}}" alt="">
+
+                        </label>
+                     </div>
+                   
+                     {% endif %}
+                  </div>
+               </div>
+    
+               <div class="inputFile">
+                  <label for="picture" class="labelAdd" >Gestion des photos</label>
+                  <a href="{{ path('app_xbox_edit_picture', {'id': xbox.id}) }}" class="iconEdit"><i class="fa-solid fa-pen-to-square"></i>Ouvrir</a>
+               </div>
+
+               <div class="inputAdd">
+                  <div class="xboxGenEdit">
+
+
+                     <p class="labelAdd">Status de la console</p>
+                     {% if statusBdd == 'to sell'%}
+                     <div class="StatusButtons">
+                        <label style="cursor: pointer;" class="custom-checkbox">
+                           <input type="checkbox" id="toSell" name="toSell" value="to sell" onclick="uncheckedSold()" checked>
+
+                           <div class="btnUnchecked icon unchecked"> En vente</div>
+                           <div class="btnChecked icon checked"> En vente</div>
+                           
+                        </label>
+                        <label style="cursor: pointer;" class="custom-checkbox">
+                           
+                           <input type="checkbox" id="sold" name="sold" value="SOLD" onclick="uncheckedSell()">
+                           <div class="btnUnchecked icon unchecked"> Vendu</div>
+                           <div class="btnChecked icon checked"> Vendu</div>
+
+                        </label>
+                     </div>
+                     {% elseif statusBdd == 'SOLD'%}
+                     <div class="StatusButtons">
+                        <label style="cursor: pointer;" class="custom-checkbox">
+                           <input type="checkbox" id="toSell" name="toSell" value="to sell" onclick="uncheckedSold()" >
+
+                           <div class="btnUnchecked icon unchecked"> En vente</div>
+                           <div class="btnChecked icon checked"> En vente</div>
+                           
+                        </label>
+                        <label style="cursor: pointer;" class="custom-checkbox">
+                           
+                           <input type="checkbox" id="sold" name="sold" value="SOLD" onclick="uncheckedSell()" checked>
+                           <div class="btnUnchecked icon unchecked"> Vendu</div>
+                           <div class="btnChecked icon checked"> Vendu</div>
+
+                        </label>
+                     </div>
+                     {% endif %}
+                 
+                  </div>
+               </div>
+
+            </div>
+         </div>
+
+         <button type="submit" class="buttonAdd"><i class="fa-brands fa-xbox"></i> Validez</button>
+      </form>
+   </div>
+</div>
+
+{% endblock %}

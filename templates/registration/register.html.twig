@@ -1,0 +1,93 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}DJ SHOP - Inscription
+{% endblock %}
+
+{% block body %}
+
+
+	<div class="container registerCard">
+
+		<form method="POST" class="formInputRegister">
+			<div class="headLogin">
+				<p>Bienvenue sur Dj Shop</p>
+				<small>Inscrivez-vous</small>
+			</div>
+
+			<div class="errors">
+				{% for flashError in app.flashes('verify_email_error') %}
+					<div class="alert alert-danger " role="alert">{{ flashError }}</div>
+				{% endfor %}
+				{% for level, messages in app.flashes %}
+					{% for message in messages %}
+						<div class="alert alert-{{ level }} ">
+							{{ message|raw }}
+						</div>
+					{% endfor %}
+				{% endfor %}
+			</div>
+			{{ form_start(registrationForm) }}
+			<div class="formRegister">
+				<div class="leftFormRegister">
+
+					<p class="text-left mt-4 mb-1 keyFlex">
+						<label for="firstname">Prénom</label>
+						<input type="text" id="firstname" name="firstname">
+					</p>
+
+					<p class="text-left mt-4 mb-1 keyFlex">
+						<label for="lastname">Nom</label>
+						<input type="text" id="lastname" name="lastname">
+					</p>
+
+					<p class="text-left mt-4 mb-1">{{ form_label(registrationForm.email, 'Adresse Email') }}</p>
+					{{ form_widget(registrationForm.email) }}
+
+
+					<p class=" mt-4 mb-1">{{ form_label(registrationForm.plainPassword, 'Mot de Passe') }}</p>
+					{{ form_widget(registrationForm.plainPassword) }}
+
+					<p class="text-left mt-4 mb-1 keyFlex">
+						<label for="confirm_password">Confirmation de mot de passe</label>
+						<input type="password" id="confirm_password" name="confirm_password">
+					</p>
+
+
+				</div>
+				<div class="rightFormRegister">
+					<p class="text-left mt-4 mb-1 keyFlex">
+						<label for="phone">Numero de telephone</label>
+						<input type="phone" id="phone" name="phone">
+					</p>
+					<p class="text-left mt-4 mb-1 keyFlex">
+						<label for="adress_one">Adress ligne 1</label>
+						<input type="text" id="adress_one" name="adress_one">
+					</p>
+					<p class="text-left mt-4 mb-1 keyFlex">
+						<label for="adress_two">Adress ligne 2</label>
+						<input type="text" id="adress_two" name="adress_two">
+					</p>
+					<p class="text-left mt-4 mb-1 keyFlex">
+						<label for="postal">Code Postal</label>
+						<input type="text" id="postal" name="postal">
+					</p>
+					<p class="text-left mt-4 mb-1 keyFlex">
+						<label for="city">Ville</label>
+						<input type="text" id="city" name="city">
+					</p>
+
+				</div>
+			</div>
+
+
+			<div class="btnRegister">
+				<button type="submit" class="btnConnexion">S'inscrire</button>
+				<a class="btnConnexion" href="{{ path('login')}}">Vous avez un compte ?</a>
+			</div>
+
+			{{ form_end(registrationForm) }}
+		</form>
+	</div>
+
+
+{% endblock %}

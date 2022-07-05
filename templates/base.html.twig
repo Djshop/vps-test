@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>
+			{% block title %}DJ SHOP
+			{% endblock %}
+		</title>
+		<link rel="icon" type="image/png" href="{{ asset('image/xbox_logo.svg.png')}}">
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css">
+		<link rel="stylesheet" href="{{ asset('css/style1.css')}}">
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<script src="https://kit.fontawesome.com/a87696b285.js" crossorigin="anonymous"></script>
+		<link href='https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css' rel='stylesheet'>
+
+
+		<link href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
+		<link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
+		<link
+		href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+		{# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
+		{% block stylesheets %}
+			{{ encore_entry_link_tags('app') }}
+		{% endblock %}
+
+		{% block javascripts %}
+			{{ encore_entry_script_tags('app') }}
+		{% endblock %}
+	</head>
+
+	<body>
+
+		{% block cart %}
+			{% if app.user %}
+				{% if app.user.cart != 'empty' %}
+					<div class="cart">
+						<a href="{{ path('app_cart') }}">
+							<i class="fa-solid fa-cart-shopping iCart"></i>
+							<div class="plus"></div>
+						</a>
+					</div>
+				{% else %}
+					<div class="cartEmpty">
+						<i class="fa-solid fa-cart-shopping iCart"></i>
+					</div>
+				{% endif %}
+			{% endif %}
+		{% endblock cart %}
+		{% block navbar %}
+			<nav id="up" class="navbar navbar-expand-lg navbar-light bg-light">
+				<div class="container-fluid">
+					<img class="navLogo" src="{{ asset('image/djpixel.png')}}" alt="">
+					<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+						<span class="burger">
+							<i class="fa-solid fa-bars"></i>
+						</span>
+					</button>
+					<div class="collapse navbar-collapse" id="navbarSupportedContent">
+						<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+							<li class="nav-item">
+								<a class="nav-link active" aria-current="page" href="{{ path('app_xbox_index') }}">Boutique</a>
+							</li>
+
+							<li class="nav-item">
+								<a class="nav-link active" aria-current="page" href="{{ path('app_contact') }}">Contact</a>
+							</li>
+							<li class="nav-item dropdown">
+								<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+									Infos
+								</a>
+								<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+									<li>
+										<a class="dropdown-item" href="{{ path('app_about') }}">A propos de DJ Shop</a>
+									</li>
+									<li>
+										<a class="dropdown-item" href="{{ path('app_rgh') }}">Qu'est-ce qu'une RGH</a>
+									</li>
+									<li><hr class="dropdown-divider"></li>
+									<li>
+										<a class="dropdown-item" href="{{ path('app_livraisons') }}">Livraisons & Retours</a>
+									</li>
+									<li>
+										<a class="dropdown-item" href="{{ path('app_paiment') }}">Moyens de paiments</a>
+									</li>
+								</ul>
+							</li>
+
+
+							{% if app.user %}
+								{% if app.user.isVerified == 0 %}
+									<li class="nav-item" id="verified">
+										<a class="nav-link active" href="{{ path('app_account') }}">
+											Compte non verifié</a>
+									</li>
+								{% endif %}
+								{% if is_granted('ROLE_ADMIN') == false %}
+
+									<li class="nav-item" id="userName">
+										<a class="nav-link active" aria-current="page" data-bs-toggle="offcanvas" href="#offcanvasScrolling" role="button" aria-controls="offcanvasScrolling">Bonjour
+											{{app.user.firstname}}
+											<i class="fa-solid fa-angle-down"></i>
+										</a>
+
+									</li>
+								{% else %}
+
+									<li class="nav-item" id="userNameAdmin">
+										<a class="nav-link active" aria-current="page" data-bs-toggle="offcanvas" href="#offcanvasScrollingAdmin" role="button" aria-controls="offcanvasScrollingAdmin">Bonjour
+											{{app.user.firstname}}
+											<i class="fa-solid fa-angle-down"></i>
+										</a>
+
+									</li>
+								{% endif %}
+
+								<li class="nav-item">
+									<a class="nav-link active" aria-current="page" href="{{ path('app_logout') }}">Déconnexion</a>
+								</li>
+							{% else %}
+								<li class="nav-item">
+									<a class="nav-link active" aria-current="page" href="{{ path('login') }}">Connexion</a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link active" aria-current="page" href="{{ path('app_register') }}">Inscription</a>
+								</li>
+							{% endif %}
+
+
+						</ul>
+
+					</div>
+				</div>
+			</nav>
+
+		{% endblock %}
+
+		{# Offcanvas user #}
+		<div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
+			<div class="offcanvas-header">
+				<h5 class="offcanvas-title" id="offcanvasScrollingLabel">Menu Utilisateurs</h5>
+				<i class="fa-solid fa-xmark" type="button" data-bs-dismiss="offcanvas" aria-label="Close" id="closeBtnCanvas"></i>
+			</div>
+			<div class="offcanvas-body">
+				<a style="margin-top: 30%;" href="{{ path('app_account') }}" class="filterCardMenuUser">
+					<i class="fa-solid fa-user-secret"></i>
+					<p>Mon Profil</p>
+				</a>
+				<a href="{{ path('order') }}" class="filterCardMenuUser">
+					<i class="fa-solid fa-tags"></i>
+					<p>Mes Commandes</p>
+				</a>
+				<a href="{{ path('app_logout') }}" class="filterCardMenuUser">
+					<i class="fa-solid fa-arrow-right-from-bracket"></i>
+					<p>Déconnexion</p>
+				</a>
+			</div>
+		</div>
+		{# end Offcanvas user #}
+		{# Offcanvas admin #}
+		<div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasScrollingAdmin" aria-labelledby="offcanvasScrollingAdminLabel">
+			<div class="offcanvas-header">
+				<h5 class="offcanvas-title" id="offcanvasScrollingAdminLabel">Menu Administritateurs</h5>
+				<i class="fa-solid fa-xmark" type="button" data-bs-dismiss="offcanvas" aria-label="Close" id="closeBtnCanvas"></i>
+			</div>
+			<div class="offcanvas-body">
+				<a style="margin-top: 15%;" href="{{ path('app_xbox_new') }}" class="filterCardMenuUser">
+					<i class="fa-solid fa-plus"></i>
+					<p>Xbox</p>
+				</a>
+
+				<a href="{{ path('app_xbox_list') }}" class="filterCardMenuUser">
+					<i class="fa-solid fa-clipboard-list"></i>
+					<p>Stock</p>
+				</a>
+				<a href="{{ path('app_order_admin') }}" class="filterCardMenuUser">
+					<i class="fa-solid fa-boxes-stacked"></i>
+					<p>Commandes</p>
+				</a>
+				<a href="{{ path('app_users_list') }}" class="filterCardMenuUser">
+					<i class="fa-solid fa-users"></i>
+					<p>Utilisateurs</p>
+				</a>
+				<a href="{{ path('app_account') }}" class="filterCardMenuUser">
+					<i class="fa-solid fa-user-secret"></i>
+					<p>Mon Profil</p>
+				</a>
+				<a href="{{ path('app_logout') }}" class="filterCardMenuUser">
+					<i class="fa-solid fa-arrow-right-from-bracket"></i>
+					<p>Déconnexion</p>
+				</a>
+			</div>
+		</div>
+
+		{# end Offcanvas admin #}
+    	
+
+
+      <div id="blockBody">
+  {% block body %}{% endblock %}
+  </div>
+    
+
+		
+    
+
+
+	
+
+
+
+ 
+
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+		<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+		{% block footer %}
+			<footer id="footer" class="footer">
+				<div class="logo">
+					<div class=" containerLogo">
+						<div class="social">
+							<a class="iconFooter Facebook" href="">
+								<i class="fa-brands fa-facebook-f"></i>
+							</a>
+							<a class="iconFooter Instagram" href="">
+								<i class="fa-brands fa-instagram"></i>
+							</a>
+							<a class="iconFooter Twitter" href="">
+								<i class="fa-brands fa-twitter"></i>
+							</a>
+						</div>
+						<div class="paypal">
+							<img id="PaypalCards" src="{{ asset('image/logo/paypalsingleMini.png')}}" alt="">
+							<img id="Paypal4" src="{{ asset('image/logo/paypal-4fois.png')}}" alt="">
+						</div>
+						<div class="colissimo">
+							<img id="colissimoLogoFooter" src="{{ asset('image/logo/colissimo.png')}}" alt="">
+							<img id="colissimoSuiviFooter" src="{{ asset('image/logo/colissimoSuivi.png')}}" alt="">
+						</div>
+
+
+					</div>
+
+				</div>
+				<div class="link">
+					<div class="ulLink">
+						<div class="labelLink">AIDES & INFORMATIONS</div>
+
+						<div class="linkBlock">
+							<a href="{{ path('app_contact') }}">Contact
+							</a>
+							<a href="">Livraisons</a>
+							<a href="">Moyens de paiments</a>
+
+						</div>
+
+					</div>
+					<div class="ulLink">
+						<div class="labelLink">à propos de DJ Shop</div>
+
+						<div class="linkBlock">
+							<a href="{{ path('app_xbox_index') }}">Tout nos produits</a>
+							<a href="">A propos de DJ Shop</a>
+							<a href="">Qu'est-ce qu'une RGH</a>
+						</div>
+
+					</div>
+					<div class="ulLink">
+						<div class="labelLink">Votre Espace</div>
+
+						<div class="linkBlock">
+							<a href="{{ path('app_account') }}">Mon Profil</a>
+							<a href="{{ path('order') }}">Mes Commandes</a>
+							<a href="{{ path('app_logout') }}">Déconnexion</a>
+						</div>
+
+					</div>
+
+				</div>
+				<div class="legal">
+					<div class="year">© Dj Shop - 2022</div>
+					<div class="devName">Yanis Mengouchi</div>
+				</div>
+			</footer>
+		{% endblock %}
+
+      <div id="pageVerify" class="pageVerify" style="--cover:url(/image/verify/verifyDoor.jpg)" >
+				<div class="container containerVerify">
+					<div class="leftVerify">
+
+
+						<img src="{{asset('image/verify/verifyCloud.png')}}" alt="verify cloud">
+						<div id="errorsVerify" class="alert text-center alert-danger">
+							Mot de passe incorrect
+						</div>
+						<div id="succesVerify" class="alert text-center alert-success">
+							Mot de passe correct
+						</div>
+						<form method="Post" id="formVerify">
+							<input type="password" id="verifyInput" name="verifyInput" placeholder="Mot de passe ?"  >
+							<div class="btnVerify" onclick="getVal()">
+								Entrez
+							</div>
+						</div>
+            </form>
+
+
+					</div>
+
+
+				</div>
+		  </div>
+
+       <script>
+    {# Si on trouve ne session le mot de passe reclamer on peut acceder au site #}
+    var sessionVerify = sessionStorage.getItem('verify');
+    if(sessionVerify){
+      console.log(sessionVerify);
+      document.getElementById("blockBody").style.display = "block";
+
+  // Sinon on tombe sur le formulaire reclamant le mdp et depuis n'importe quel page  et on cache le contenu du body
+    }else{
+      document.getElementById("blockBody").style.display = "none";
+      document.getElementById("up").style.display = "none";
+      document.getElementById("footer").style.display = "none";
+      document.getElementById("pageVerify").style.display = "block";
+      
+     
+     		// Js pour verifié le mot de passe correspond 
+				function getVal() {
+
+          var verify = document.forms['formVerify']['verifyInput'].value;
+
+      
+               // si il correspond on creer la session verify et on rafraichis la page ce qui affichera le contenu du body
+          if (verify == "DjshopMdp1") {
+          sessionStorage.setItem('verify', 'verify');
+          document.getElementById("errorsVerify").style.display = "none";
+          document.getElementById("succesVerify").style.display = "flex";
+          //Rafraichissement de la page aprés 1s
+          setTimeout(function(){
+            location.reload();
+          }, 1000);
+         // si il ne correspond pas affichage de l'erreurs
+          } else {
+          document.getElementById("succesVerify").style.display = "none";
+          document.getElementById("errorsVerify").style.display = "flex";
+         
+          }
+         
+        }
+		
+
+
+			
+    }
+    </script>
+ 
+
+	</body>
+
+
+</html>

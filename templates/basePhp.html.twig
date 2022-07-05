@@ -1,0 +1,22 @@
+   if (!empty($_POST)) {
+
+            $safe = array_map('trim', array_map('strip_tags', $_POST));
+   
+   if (isset($safe['verify'])) {
+                $errorVerify=[];
+                if($safe['verify'] != 'DjshopMdp1'){
+                    $errorVerify[]='Mot de passe incorrect';
+                }
+                if (count($errorVerify) == 0) {
+                    //Envoi des donnees a la vue en session
+                $session = $this->requestStack->getSession();
+          
+
+                $session->set('verify', 'verify');
+                $this->addFlash('success', 'Mot de passe correct');
+
+                }else{
+                    $this->addFlash('danger', implode('<br>', $errorVerify));
+                }
+            }
+   }

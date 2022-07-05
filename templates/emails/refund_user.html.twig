@@ -1,0 +1,9 @@
+<h4>Bonjour {{ app.session.get('firstnameFetch') }} {{ app.session.get('lastnameFetch') }} !</h4>
+
+<p>
+    Votre commande #{{ app.session.get('orderName') }} a bien étais remboursé. Vous pouvez verifier la transaction n°{{ app.session.get('refund') }} directement depuis <a href="https://www.paypal.com/">Paypal</a>
+</p>
+
+
+
+

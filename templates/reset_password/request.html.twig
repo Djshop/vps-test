@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}DJ SHOP - Mot de passe oublié
+{% endblock %}
+
+{% block body %}
+
+
+	{% for flash_error in app.flashes('reset_password_error') %}
+		<div class="alert alert-danger" role="alert">{{ flash_error }}</div>
+	{% endfor %}
+	{# <div class="formInput">
+						<div class="resetForm">
+			
+			
+							<h3 id="h3EmailReset">Mot de passe oublié ?</h3>
+			
+							{{ form_start(requestForm) }}
+							{{ form_label(requestForm.email, 'Adresse Email') }}
+							{{ form_widget(requestForm.email) }}
+							<div>
+								<small>
+									Entrez votre adresse email et vous nous enverrons un lien pour renitialiser votre mot de passe.
+								</small>
+							</div>
+						</div>
+			
+						<button class="btnResetRequest">Envoyez le mail de rénitialisation</button>
+						{{ form_end(requestForm) }}
+					</div> #}
+	<div class="container containerLogin">
+		<div class="loginBody">
+			<div class="leftBody">
+				<img src="{{ asset("image/xbox-controller.jpg")}}" alt="">
+			</div>
+			<div class="rightBody">
+				<div class="formLogin">
+					<div class="headLogin headLoginRequest">
+						<p>Mot de passe oublié ?</p>
+						<small>Entrez votre adresse email et vous nous enverrons un lien pour renitialiser votre mot de passe.</small>
+					</div>
+
+					<div class="formRequest">
+						{{ form_start(requestForm) }}
+						{{ form_label(requestForm.email) }}
+						{{ form_widget(requestForm.email) }}
+						<button class="btnConnexion">Rénitialiser</button>
+						{{ form_end(requestForm) }}
+					</div>
+				</div>
+
+			</div>
+
+		</div>
+	</div>
+{% endblock %}

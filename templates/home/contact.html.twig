@@ -1,0 +1,78 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}DJ SHOP - Contact{% endblock %}
+
+{% block body %}
+{% block javascripts %}
+<script src="{{ asset('js/contact.js')}}"></script>
+{% endblock %}
+<div class="messageContact">
+    <div class="container">
+
+   
+    {% for level, messages in app.flashes %}
+    {% for message in messages %}
+    <div class="alert text-center alert-{{ level }} ">
+        {{ message|raw }}
+    </div>
+    {% endfor %}
+    {% endfor %}
+</div>
+</div>
+
+<div class="container containerContact">
+    <div class="pictureContact" id="contactPicture">
+        <img src="{{ asset('image/contact.png')}}" alt="">
+    </div>
+    <div class="formContact">
+        <form method="POST" class="contactForm">
+            <h2 class="h2Contact">Contactez-nous</h2>
+            <div class="inputsContact">
+                {% if not app.user %}
+                <div class="inputContact">
+                    <input type="text" name="contactName" placeholder="Votre Nom">
+                </div>
+                <div class="inputContact">
+                    <input type="email" name="emailSender" placeholder="Votre Email">
+                </div>
+                {% endif %}
+                <div class="inputContact">
+                    <select name="subject" id="subject-select" onchange="openOther()">
+                    <optgroup>
+                        <option value="">--- Choisir un sujet ---</option>
+                        {% if app.user %}
+                        <option value="Je n'ai pas reçus ma commande">Je n'ai pas reçus ma commande</option>
+                        <option value="Je n'arrive pas a commander">Je n'arrive pas a commander</option>
+                        {% else %}
+                        <option value="J'ai un soucis au moment de creer mon compte">J'ai un soucis pour la création mon
+                            compte</option>
+                        {% endif %}
+                        <option value="other">Autres...</option>
+                    </optgroup>
+                    </select>
+                  
+                </div>
+                <div class="inputContact"  id="otherSubject">
+                    <input type="text" name="other" placeholder="Préciser...">
+                </div>
+                <div class="inputContact">
+                    <input type="text" name="textAreaContact" placeholder="Votre Message">
+                </div>
+            </div>
+
+            <div class="btnFormContact">
+     
+                <button type="submit" class="btnAnim">
+                    <div class="btnTextFormContact">
+                        Envoyez <i class="fa-solid fa-paper-plane"></i>
+                    </div>
+                </button>
+            </div>
+        </form>
+    </div>
+    <div class="pictureContact" id="contactPictureMobile">
+        <img src="{{ asset('image/contact.png')}}" alt="">
+    </div>
+</div>
+
+{% endblock %}

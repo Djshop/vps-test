@@ -1,0 +1,224 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}DJ SHOP - Mon panier
+{% endblock %}
+
+{% block body %}
+	{% block cart %}{% endblock cart %}
+	{% block javascripts %}
+		<script src="{{ asset('js/cart.js')}}"></script>
+
+	{% endblock %}
+
+	{# <div class="container">
+			<div class="headerCart">
+			<i class="fa-solid fa-bag-shopping"></i> Mon panier</div>
+			<div class="cartBody"></div>
+		</div> #}
+
+	<div
+		class="cartHeader">
+
+		
+		<div class="title" id="titleCart">
+			<h3>
+				<i class="fa-solid fa-bag-shopping"></i>
+				Mon Panier</h3>
+		</div>
+		<div class="title" id="titleAdress">
+			<h3><i class="fa-solid fa-house"></i> Mon Adresse de livraison</h3>
+		</div>
+		<div class="stepContainer">
+
+			<div class="step " id="stepOne">
+				<div>Mon Panier</div>
+				<i class=" fa-solid fa-arrow-right-long"></i>
+				<div class="breadcrumbOne">Facturation</div>
+				<i class=" breadcrumbOne fa-solid fa-arrow-right-long"></i>
+				<div class="breadcrumbOne">Paiement</div>
+			</div>
+			<div class="step " id="stepTwo">
+				<div onclick="breadcrumbCart()" id="breadCartHide">Mon Panier</div>
+				<i class="breadCartHideGreen fa-solid fa-arrow-right-long"></i>
+				<div>Facturation</div>
+				<i class=" fa-solid fa-arrow-right-long"></i>
+				<div class="breadcrumbOne">Paiement</div>
+			</div>
+		</div>
+	</div>
+		<div class="containerMethod" id="methodCart">
+			<div class="method">
+				<div class="methodCard">
+					<div class="methodTitle">
+						Méthode de paiement
+					</div>
+					<div class="methodImgPaypal">
+						<img src="{{ asset('image/paypal.png')}}" alt="logo paypal" class="logoCart" id="logoCartPaypal">
+					</div>
+				</div>
+				<div class="methodCard">
+					<div class="methodTitle">
+						Méthode de livraison
+					</div>
+					<div class="methodImgColissimo">
+						<img src="{{ asset('image/colissimoGrey.png')}}" alt="logo colissimo" class="logoCart" id="logoCartColissimo">
+					</div>
+				</div>
+			</div>
+		</div>
+	<div class="container containerCartPage">
+
+
+	
+
+
+		<div class=" containerDeleteCart" id="deleteAllCartId">
+
+			<div class="deleteCart">
+				<form method="POST">
+					<input type="hidden" name="deleteCart" value="{{cartFetchId}}">
+
+					<button type="submit" class="btnDeleteCart">
+						<i class="fa-solid fa-trash-can"></i>Vider le panier</button>
+				</form>
+			</div>
+		</div>
+		{% for xboxId in xboxIds %}
+			<div class="containerCartContent  cartRecap">
+
+				<div class="picture ">
+					{% set pictures = xboxId.picture|split('_') %}
+					<a href="{{ path('app_xbox_show', {'id': xboxId.id}) }}"><img src="{{ asset(pictures.0)}}" alt="{{ xboxId.title}}"></a>
+
+				</div>
+				<div class="text  ">
+					<a class="titleXbox " href="{{ path('app_xbox_show', {'id': xboxId.id}) }}">{{ xboxId.title}}</a>
+					<div class="priceBdd ">{{xboxId.price}}
+						€</div>
+					<div class="delete ">
+						<form method="POST">
+							<input type="hidden" name="deleteIdCart" value="{{xboxId.id}}">
+
+							<button type="submit">
+								<i class="fa-solid fa-trash-can"></i>
+							</button>
+						</form>
+
+					</div>
+					{# <div class="description">{{ xboxId.description}}</div> #}
+
+				</div>
+
+
+			</div>
+		{% endfor %}
+		{% set nbr = xboxIds|length %}
+		<div class=" containerSubtotal" id="subTotal">
+			<div class="subtotal">
+				Sous total ({{numberArticles}}
+				articles) =
+				{{totalPrice}}
+				€
+			</div>
+		</div>
+		{% set paypal_url = 'https://www.sandbox.paypal.com/cgi-bin/webscr' %}
+		{% set paypal_id = '9FSHPJWNN839E' %}
+		<div class="deleveryService" id="deleveryService">
+			<h5>Mode de livraison</h5>
+			<p>Nous préparons les commandes sous 48h les jours ouvrés. Une fois la commande préparer nous l'expédions avec le service Colissimo Suivi 48h qui garantit une livraison en france metropolitaine sous 48h et le n° de suivis vous est transmis au moment de l'expedition du colis.</p>
+		</div>
+		<form method="post" class="formAdressValidate">
+			<input type="hidden" name="formAdressHiden" value="true">
+			<div class="containerAdressContent " id="adressRecap">
+				<div class="checkAdress">
+					<div class="selection">
+						<input type="checkbox" checked id="sameAdress" onclick="sameAdressFunction()" name="sameAdress">
+						<span>Choisir la même adresse que l'adresse de facturation</span>
+					</div>
+					<div class="adressOld">
+						<div class="fetchOldAdress adress">
+							<p>Nom :</p>
+							<span>
+								{{ app.user.firstname}}
+								{{ app.user.lastname}}</span>
+						</div>
+						<div class="fetchOldAdress adress">
+							<p>Adresse :</p>
+							<span>
+								{{ app.user.adress}}</span>
+						</div>
+						<div class="fetchOldAdress postal">
+							<p>Code Postal :</p>
+							<span>
+								{{ app.user.postal}}</span>
+						</div>
+						<div class="fetchOldAdress city">
+							<p>Ville :</p>
+							<span>
+								{{ app.user.city}}</span>
+						</div>
+						<div class="fetchOldAdress telephone">
+							<p>Numéro de Tel :</p>
+							<span>
+								{{ app.user.phone}}</span>
+						</div>
+						<div id="adressOldHide"></div>
+					</div>
+					
+				</div>
+				<div class="formAdress">
+					<div class="selection" id="newAdressSelect">
+						<input type="checkbox" id="newAdress" onclick="newAdressFunction()" name="newAdress">
+						<span>Choisir une autre adresse de livraison</span>
+					</div>
+					<div class="adressNew inputsContact">
+					<div class="name ">
+					<div class=" newAdress inputContact firstname"><input type="text" name="firstname" placeholder="Prénom "></div>
+						<div class=" newAdress inputContact lastname"><input type="text" name="lastname" placeholder="Nom"></div>
+					</div>
+					<div class="adressLines">
+					<div class=" newAdress inputContact street"><input type="text" name="adress1" placeholder="Adresse ligne 1 "></div>
+						<div class=" newAdress inputContact adress"><input type="text" name="adress2" placeholder="Adresse ligne 2"></div>
+					</div>
+						
+						
+						<div class="cityAdress">
+								<div class=" newAdress inputContact postal"><input type="text" name="postal" placeholder="Code Postal"></div>
+						<div class=" newAdress inputContact city"><input type="text" name="city" placeholder="Ville"></div>
+						</div>
+				
+						<div class=" newAdress inputContact telephone"><input type="text" name="telephone" placeholder="Numéro de Tel"></div>
+						<div id="adressNewHide"></div>
+					</div>
+					
+				</div>
+			</div>
+			<div class="containerPaypalContent" id="paypalContent">
+				<div class="order"></div>
+				<div class="orderContent">
+					<div id="adress"></div>
+					<div id="orderProducts"></div>
+				</div>
+			</div>
+			{% for level, messages in app.flashes %}
+				{% for message in messages %}
+					<div id="errorsCart" class="alert text-center col-6 alert-{{ level }}">
+						{{ message|raw }}
+					</div>
+				{% endfor %}
+			{% endfor %}
+			<div class="buttonsCarts">
+			 <div class="backbuttons">
+					<a href="{{ path('app_xbox_index') }}" class="btnBack" id="keepCart"><i class="fa-solid fa-arrow-left"></i>Continuez vos achats</a>
+					<div class="btnBack" id="keepAdress" onclick="breadcrumbCart()"><i class="fa-solid fa-arrow-left"></i>Retour au panier</div>
+				</div> 
+							<div class="buttons" onclick="cartValidate()" id="validateBtn">Validez Mon panier</div>
+			{# <div class="buttons" onclick="adressValidate()" id="adressBtn">Validez Mon Adresse</div>  #}
+			<button class="buttons" type="submit" id="adressBtn">Validez Mon Adresse</button>
+			</div>
+
+
+
+		</form>
+	</div>
+{% endblock %}

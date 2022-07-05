@@ -1,0 +1,68 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}DJ SHOP - Connexion
+{% endblock %}
+
+
+{% block body %}
+
+
+
+
+
+
+	<div id="containerLoginHide" class="container containerLogin">
+		<div class="loginBody">
+			<div class="leftBody">
+				<img src="{{ asset("image/xbox-controller.jpg")}}" alt="">
+			</div>
+			<div class="rightBody">
+				<div class="formLogin">
+					<div class="headLogin">
+						<p>Bienvenue sur Dj Shop</p>
+						<small>Connectez-vous</small>
+					</div>
+					<div class="errors">
+						{% if error %}
+							<div class=" alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+						{% endif %}
+						{% for level, messages in app.flashes %}
+							{% for message in messages %}
+								<div class="alert text-center alert-{{ level }}">
+									{{ message|raw }}
+								</div>
+							{% endfor %}
+						{% endfor %}
+					</div>
+
+					<form action="{{ path('login') }}" method="post">
+
+
+						<input type="text" id="username" name="_username" placeholder="Adresse email"/>
+
+
+						<input type="password" id="password" name="_password" placeholder="Mot de passe"/>
+
+						<a href="{{ path('app_forgot_password_request') }}" id="forgetPassword">
+							Mot de passe oublié</a>
+
+
+						<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+						<input type="hidden" name="_target_path" value="/"/>
+						<div class="buttonsConnexion">
+							<button type="submit" class="btnConnexion">Connexion</button>
+							<button class="btnConnexion">
+								<a href="{{ path('app_register') }}">Inscription</a>
+							</button>
+
+
+						</div>
+
+
+					</form>
+				</div>
+
+			</div>
+		</div>
+	</div>
+{% endblock %}

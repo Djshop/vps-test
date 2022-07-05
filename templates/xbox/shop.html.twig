@@ -1,0 +1,463 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}DJ SHOP - Boutique
+{% endblock %}
+
+{% block body %}
+	{% block javascripts %}
+		<script src="{{ asset('js/sweet-alert.js')}}"></script>
+		<script src="{{ asset('js/card.js')}}"></script>
+		<script src="{{ asset('js/xboxHomepage.js')}}"></script>
+	{% endblock %}
+	<style>
+		footer {
+			position: relative;
+			bottom: -2.5%;
+		}
+	</style>
+
+	
+
+
+
+	{% if not app.user %}
+
+		<style>
+			#optionHide {
+				display: none;
+			}
+			#containerShopHide {
+				display: none;
+			}
+			#up {
+				display: none;
+			}
+			#footer {
+				display: none;
+			}
+		</style>
+	{% else %}
+		<style>
+			#homePageHide {
+				display: none;
+			}
+		</style>
+
+	{% endif %}
+
+	<div
+		id="homePageHide" class="homePage">
+		{# <div class="bikeHome" id="bikeOne">
+									<div id="trailOne" class="trail" style="--cover:url(/image/trailOne.png)"></div>
+									<div class="bike">
+										<img src="{{ asset('image/bikeOne.png')}}" alt="">
+									</div>
+								</div>
+								<div class="bikeHome" id="bikeTwo">
+									<div id="trailTwo" class="trail" style="--cover:url(/image/trailTwo.png)"></div>
+									<div class="bike">
+										<img src="{{ asset('image/bikeTwo.png')}}" alt="">
+									</div>
+								</div> #}
+
+
+		 <img id="manetteOne" src="{{ asset('image/manetteGold.png')}}" alt=""> 
+		<img id="manetteOneSlide" src="{{ asset('image/manetteBlack.png')}}" alt="">
+		<img id="manetteTwoSlide" src="{{ asset('image/manetteWhite.png')}}" alt="">
+
+	
+		
+
+		<img id="djLogo" src="{{ asset('image/djpixel.png')}}" alt="">
+
+		<div class="visitHome">
+
+			<p class="homepageP">Visitez notre boutique</p>
+
+			<div  class="buttonsParent">
+				<div class="buttonsHomePage"></div>
+				<i class="fa-brands fa-xbox xboxHomePage"></i>
+			</div>
+			<div onclick="homepage()" id="xbxLogoAnim" class="xbxLogoAnim">
+				<div id="fontxbxLogo" class="fontxbxLogo"></div>
+				<img id="xbxLeft" class="xbxPart" src="{{ asset('image/xboxLeft.png')}}" alt="">
+				<img id="xbxTop" class="xbxPart" src="{{ asset('image/xboxTop.png')}}" alt="">
+				<img id="xbxRight" class="xbxPart" src="{{ asset('image/xboxRight.png')}}" alt="">
+				<img id="xbxBottom" class="xbxPart" src="{{ asset('image/xboxBottom.png')}}" alt="">
+			</div>
+			<div onclick="homepagePhone()" id="xbxLogoAnimPhone" class="xbxLogoAnimPhone">
+				<div id="fontxbxLogoPhone" class="fontxbxLogoPhone"></div>
+				<img id="xbxLeftPhone" class="xbxPartPhone" src="{{ asset('image/xboxLeft.png')}}" alt="">
+				<img id="xbxTopPhone" class="xbxPartPhone" src="{{ asset('image/xboxTop.png')}}" alt="">
+				<img id="xbxRightPhone" class="xbxPartPhone" src="{{ asset('image/xboxRight.png')}}" alt="">
+				<img id="xbxBottomPhone" class="xbxPartPhone" src="{{ asset('image/xboxBottom.png')}}" alt="">
+			</div>
+		</div>
+
+
+	</div>
+
+
+	<div id="optionHide" class="optionMenu">
+		<div class="triFilter">
+			<div class="labelFilter">
+				<p>Trier par</p>
+			</div>
+			<div class="buttonFilter">
+
+				{% if app.session.get('priceLow') or app.session.get('priceUp') %}
+					{% if app.session.get('priceLow') %}
+
+						<div class="priceUpFilter">
+							<form method="Post">
+								<input type="hidden" name="priceUp" value="priceUp">
+								<button type="submit" class="btnFilterGen">
+									<i class="fa-solid fa-arrow-up-short-wide"></i>
+									Prix Croissant</button>
+							</form>
+						</div>
+						<div class="priceLowFilter">
+							<form method="Post">
+								<input type="hidden" name="priceLowDeselect" value="priceLowDeselect">
+								<button type="submit" class="btnFilterGenDeselect">
+									<i class="fa-solid fa-arrow-up-wide-short"></i>
+									Prix Decroissant</button>
+							</form>
+						</div>
+
+					{% endif %}
+					{% if app.session.get('priceUp') %}
+
+						<div class="priceUpFilter">
+							<form method="Post">
+								<input type="hidden" name="priceUpDeselect" value="priceUpDeselect">
+								<button type="submit" class="btnFilterGenDeselect">
+									<i class="fa-solid fa-arrow-up-short-wide"></i>
+									Prix
+																											                            Croissant</button>
+							</form>
+						</div>
+						<div class="priceLowFilter">
+							<form method="Post">
+								<input type="hidden" name="priceLow" value="priceLow">
+								<button type="submit" class="btnFilterGen">
+									<i class="fa-solid fa-arrow-up-wide-short"></i>
+									Prix Decroissant</button>
+							</form>
+						</div>
+
+					{% endif %}
+				{% else %}
+
+					<div class="priceUpFilter">
+						<form method="Post">
+							<input type="hidden" name="priceUp" value="priceUp">
+							<button type="submit" class="btnFilterGen">
+								<i class="fa-solid fa-arrow-up-short-wide"></i>
+								Prix Croissant</button>
+						</form>
+					</div>
+					<div class="priceLowFilter">
+						<form method="Post">
+							<input type="hidden" name="priceLow" value="priceLow">
+							<button type="submit" class="btnFilterGen">
+								<i class="fa-solid fa-arrow-up-wide-short"></i>
+								Prix Decroissant</button>
+						</form>
+					</div>
+				{% endif %}
+
+				{% if app.session.get('toSell') %}
+					<div class="toSellDeselect">
+						<form method="Post">
+							<input type="hidden" name="toSellDeselect" value="toSellDeselect">
+							<button type="submit" class="btnFilterGenDeselect">
+								<i class="fa-solid fa-cart-plus"></i>
+								Disponible Seulement</button>
+						</form>
+					</div>
+
+				{% else %}
+					<div class="toSellFilter">
+						<form method="Post">
+							<input type="hidden" name="toSell" value="toSell">
+							<button type="submit" class="btnFilterGen">
+								<i class="fa-solid fa-cart-plus"></i>Disponible Seulement</button>
+						</form>
+					</div>
+				{% endif %}
+
+
+			</div>
+		</div>
+		<div class="generationFilter">
+			<div class="labelFilter">
+				<p>Filtrer par</p>
+			</div>
+			<div class="priceFilter">
+				<div class="buttonFilter">
+
+					{% if app.session.get('genFat') or app.session.get('genSlim') %}
+						{% if app.session.get('genFat') %}
+							<div class="fatFilter" id="fatFilterActive">
+								<form method="Post" id="fatFilterInactiveForm">
+									<input type="hidden" name="genFatDeselect" value="genFatDeselect">
+									<button type="submit" class="btnFilterGenDeselect">
+										<i class="fa-brands fa-xbox"></i>
+										Xbox 360
+																														                            Fat</button>
+								</form>
+							</div>
+							<div class="slimFilter" id="slimFilterInactive">
+								<form method="Post" id="slimFilterActiveForm">
+									<input type="hidden" name="genSlim" value="genSlim">
+									<button type="submit" class="btnFilterGen">
+										<i class="fa-brands fa-xbox"></i>Xbox 360 Slim</button>
+								</form>
+							</div>
+
+						{% endif %}
+
+						{% if app.session.get('genSlim') %}
+
+							<div class="fatFilter" id="fatFilterInactive">
+								<form method="Post" id="fatFilterActiveForm">
+									<input type="hidden" name="genFat" value="genFat">
+									<button type="submit" class="btnFilterGen">
+										<i class="fa-brands fa-xbox"></i>Xbox 360 Fat</button>
+								</form>
+							</div>
+							<div class="slimFilter" id="slimFilterActive">
+								<form method="Post" id="slimFilterInactiveForm">
+									<input type="hidden" name="genSlimDeselect" value="genSlimDeselect">
+									<button type="submit" class="btnFilterGenDeselect">
+										<i class="fa-brands fa-xbox"></i>
+										Xbox 360
+																														                            Slim</button>
+								</form>
+							</div>
+
+						{% endif %}
+
+
+					{% else %}
+						<div class="fatFilter" id="fatFilterInactive">
+							<form method="Post" id="fatFilterActiveForm">
+								<input type="hidden" name="genFat" value="genFat">
+								<button class="btnFilterGen">
+									<i class="fa-brands fa-xbox"></i>Xbox 360 Fat</button>
+							</form>
+						</div>
+						<div class="slimFilter" id="slimFilterInactive">
+							<form method="Post" id="slimFilterActiveForm">
+								<input type="hidden" name="genSlim" value="genSlim">
+								<button class="btnFilterGen">
+									<i class="fa-brands fa-xbox"></i>Xbox 360 Slim</button>
+							</form>
+						</div>
+					{% endif %}
+				</div>
+				<form method="Post" class="cancelFilters">
+					<input type="hidden" name="cancelFilters" value="cancelFilters">
+					<button type="submit" class="btnFilterGen">
+						<i class="fa-solid fa-delete-left"></i>Rénitialiser les filtres</button>
+				</form>
+			</div>
+
+
+		</div>
+
+	</div>
+
+	<div id="containerShopHide" class="container containerShop">
+		<div class="containerShop">
+			<a href="#up">
+				<i id="upArrow" class="fa-solid fa-circle-up "></i>
+			</a>
+
+
+			<div class="consoles">
+				{% for xbox in xboxes %}
+					{% set xboxPicture = xbox.picture|split('_') %}
+					<div class="cardXboxNew" id="card{{xbox.id}}">
+						<div class="top-card">
+							<div class="picture">
+								<img src="{{asset(xboxPicture.0)}}" alt="{{xbox.picture}}">
+							</div>
+
+							<div class="info infoAll" id="info{{xbox.id}}">
+								<i class="bi bi-info-circle" id="iconInfoAll{{xbox.id}}" onclick="infoGrow('{{xbox.id}}')"></i>
+								<i class="bi bi-info-circle closeInfo" id="closeInfoAll{{xbox.id}}" onclick="infoDown('{{xbox.id}}')"></i>
+								<div class="textInfo" id="textinfoAll{{xbox.id}}">
+									<p class="titleInfo">
+										{{xbox.title}}</p>
+									<p class="descriptionInfo">{{xbox.description}}</p>
+									<a href="{{ path('app_xbox_show', {'id': xbox.id}) }}" class="btnSeeMoreXbox">Voir plus
+																														                                ..</a>
+								</div>
+							</div>
+							<div class="info infoMobile" id="infoMobile{{xbox.id}}">
+								<i class="bi bi-info-circle" id="iconInfoMobile{{xbox.id}}" onclick="infoGrowMobile('{{xbox.id}}')"></i>
+								<i class="bi bi-info-circle closeInfo" id="closeInfoMobile{{xbox.id}}" onclick="infoDownMobile('{{xbox.id}}')"></i>
+								<div class="textInfo" id="textinfoMobile{{xbox.id}}">
+									<p class="titleInfo">
+										{{xbox.title}}</p>
+									<p class="descriptionInfo">{{xbox.description}}</p>
+									<a href="{{ path('app_xbox_show', {'id': xbox.id}) }}" class="btnSeeMoreXbox">Voir plus
+																														                                ..</a>
+								</div>
+							</div>
+						</div>
+
+						{% if xbox.sold == 'SOLD' %}
+							<div class="bottom-card">
+								<div class="addToCart">
+									<div class="price">
+										<p class="titleP">{{xbox.title|slice(0,15)}}</p>
+										<p class="priceP">{{xbox.price}}€</p>
+									</div>
+									<div class="logoSold">
+										Vendu
+									</div>
+								</div>
+							</div>
+						{% else %}
+
+							{% if app.user %}
+								{% if app.user.isVerified == 1 %}
+									{% if xbox.id in cartProducts %}
+										<style>
+											#addToCartallCart{{xbox.id}}{
+												margin-left: -100%;
+											}
+										</style>
+										<form method="POST" id="deleteFromCartFormAll{{xbox.id}}">
+											<input type="hidden" value="create" name="deleteFromCart">
+											<input type="hidden" value="{{xbox.id}}" name="deleteIdCart">
+
+
+										</form>
+										<div class="bottom-card">
+											<div class="addToCart" id="addToCartallCart{{xbox.id}}">
+												<div class="price">
+													<p class="titleP">{{xbox.title|slice(0,15)}}</p>
+													<p class="priceP">{{xbox.price}}€</p>
+												</div>
+												<div class="logo" onclick="addToCartAnim('allCart','{{xbox.id}}')">
+													<i class="fa-solid fa-cart-plus addtoCartIcon"></i>
+												</div>
+											</div>
+											<div class="deleteFromCart deleteFromCartAll" onpointerover="addCartUp('addAllCart{{xbox.id}}')" onpointerout="addCartDown('addAllCart{{xbox.id}}')">
+												<div class="logoDelete">
+													<div class="added" id="addAllCart{{xbox.id}}">
+														<i class="bi bi-check"></i>
+													</div>
+													<div class="delete" id="delete{{xbox.id}}" onclick="deleteFromCartAnim('allCart','{{xbox.id}}')">
+														<i class="bi bi-x"></i>
+													</div>
+												</div>
+												<div class="titleAdded">
+													<p class="titleP">{{xbox.title|slice(0,15)}}</p>
+													<p class="cartP">
+														Ajouté au panier</p>
+												</div>
+											</div>
+											<div class="deleteFromCart deleteFromCartMobile">
+												<div class="logoDelete">
+													<div class="delete" id="delete{{xbox.id}}" onclick="deleteFromCartAnim('allCart','{{xbox.id}}')">
+														<i class="bi bi-x"></i>
+													</div>
+												</div>
+												<div class="titleAdded">
+													<p class="titleP">{{xbox.title|slice(0,15)}}</p>
+													<p class="cartP">
+														Ajouté au panier</p>
+												</div>
+											</div>
+										</div>
+									{% else %}
+										<form method="POST" id="addFromCartFormAll{{xbox.id}}">
+											<input type="hidden" value="create" name="addToCart">
+											<input type="hidden" value="{{xbox.id}}" name="productsId">
+
+										</form>
+										<div class="bottom-card">
+											<div class="addToCart" id="addToCartall{{xbox.id}}">
+												<div class="price">
+													<p class="titleP">{{xbox.title|slice(0,15)}}</p>
+													<p class="priceP">{{xbox.price}}€</p>
+												</div>
+												<div class="logo" onclick="addToCartAnim('all','{{xbox.id}}')">
+													<i class="fa-solid fa-cart-plus addtoCartIcon"></i>
+												</div>
+											</div>
+											<div class="deleteFromCart deleteFromCartAll" onpointerover="addCartUp('addAll{{xbox.id}}')" onpointerout="addCartDown('addAll{{xbox.id}}')">
+												<div class="logoDelete">
+													<div class="added" id="addAll{{xbox.id}}">
+														<i class="bi bi-check"></i>
+													</div>
+													<div class="delete" id="delete{{xbox.id}}" onclick="deleteFromCartAnim('all','{{xbox.id}}')">
+														<i class="bi bi-x"></i>
+													</div>
+												</div>
+												<div class="titleAdded">
+													<p class="titleP">{{xbox.title|slice(0,15)}}</p>
+													<p class="cartP">
+														Ajouté au panier</p>
+												</div>
+											</div>
+											<div class="deleteFromCart deleteFromCartMobile">
+												<div class="logoDelete">
+													<div class="delete" id="delete{{xbox.id}}" onclick="deleteFromCartAnim('allCart','{{xbox.id}}')">
+														<i class="bi bi-x"></i>
+													</div>
+												</div>
+												<div class="titleAdded">
+													<p class="titleP">{{xbox.title|slice(0,15)}}</p>
+													<p class="cartP">
+														Ajouté au panier</p>
+												</div>
+											</div>
+										</div>
+									{% endif %}
+
+								{% else %}
+									<div class="bottom-card">
+										<div class="addToCart" id="addToCart{{xbox.id}}">
+											<div class="price">
+												<p class="titleP">{{xbox.title|slice(0,15)}}</p>
+												<p class="priceP">{{xbox.price}}€</p>
+											</div>
+											<div class="logo" onclick="sweetAlertVerified()">
+												<i class="fa-solid fa-cart-plus addtoCartIcon"></i>
+											</div>
+										</div>
+									</div>
+								{% endif %}
+							{% else %}
+								<div class="bottom-card">
+									<div class="addToCart" id="addToCart{{xbox.id}}">
+										<div class="price">
+											<p class="titleP">{{xbox.title|slice(0,15)}}</p>
+											<p class="priceP">{{xbox.price}}€</p>
+										</div>
+										<div class="logo" onclick="sweetAlertConnected()">
+											<i class="fa-solid fa-cart-plus addtoCartIcon"></i>
+										</div>
+									</div>
+								</div>
+							{% endif %}
+						{% endif %}
+
+					</div>
+				{% endfor %}
+
+			</div>
+
+		</div>
+	</div>
+
+
+{% endblock %}
+
+

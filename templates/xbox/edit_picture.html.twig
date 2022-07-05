@@ -1,0 +1,81 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}DJ SHOP - Gestion photos{% endblock %}
+
+
+{% block body %}
+
+{% block javascripts %}
+<script src="{{ asset('js/picture.js')}}"></script>
+{% endblock %}
+
+
+<div class="container containerEditPicture">
+    <div class="editPicture">
+        <div class="backButton ">
+            <form method="POST">
+                <input type="hidden" name="backButton" value="{{ xbox.id}}">
+                <button type="submit" class='buttonBack'><i class="fa-solid fa-delete-left"></i> Retour</button>
+            </form>
+        </div>
+
+
+        <div class="miniPictureContainer">
+            <div class="bigPicture bigPictureEdit">
+                <img id="expandedImg" class="expandedImgEdit" style="width:100%" src="{{ asset(pictures.0)}}">
+            </div>
+
+            <div class="miniPicture">
+                {% for picture in pictures %}
+                <img class="imgGallery" src="{{ asset(picture)}}" alt="{{ picture}}" onclick="myFunction(this);">
+                {% endfor %}
+            </div>
+
+        </div>
+        <br>
+     
+
+        <div class="containerAddPicture">
+            <h3 class="h3Title" style="padding-bottom:30px;padding-top:30px;">Ajoutez ou supprimé des photos</h3>
+            <p class='btn btnAddPicture' onclick="addPicture();"><i class="fa-solid fa-plus"></i> Photos</p>
+
+        </div>
+        <div class="listPictureContainer">
+            <table class="table">
+
+                <tbody>
+                    {% for picture in pictures %}
+                    <tr>
+                        <td><img src="{{ asset(picture)}}" alt="{{ picture}}"></td>
+                        <td>
+                            <form method="POST" class="formDelete">
+                                <input type="hidden" name="deletePicture" value="{{ picture}}">
+                                <button type="submit" class='btn btn-danger'>Supprimer</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div id="addPictureForm">
+        <div class="containerAllScreen">
+            <div class="form">
+                <i id="iconClose" onclick="closeAddForm();" class="fa-solid fa-xmark iconClose"
+                  ></i>
+                <form method="POST" enctype="multipart/form-data" class="formAdd">
+                    <div class="inputFile">
+                        <label for="picture" class="labelAdd labelAddPicture">Photos</label>
+                        <input class="mb-3 mt-3" type="file" id="picture" name="picture[]" multiple />
+                    </div>
+                    <input type="hidden" name="addPicture" value="add">
+                    <button type="submit" class="buttonAddPicture"><i class="fa-solid fa-file-import"></i> Ajoutez</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

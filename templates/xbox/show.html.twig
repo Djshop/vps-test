@@ -1,0 +1,143 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}DJ SHOP - {{ xbox.title }}{% endblock %}
+
+{% block body %}
+{% block javascripts %}
+<script src="{{ asset('js/picture.js')}}"></script>
+<script src="{{ asset('js/sweet-alert.js')}}"></script>
+{% endblock %}
+
+    
+        {# <div class="backButtonShow ">
+            <a href="{{ path('app_xbox_index') }}" class="btn btn-danger"><i class="fa-solid fa-delete-left"></i>
+                Retour à la Boutique</a>
+
+        </div> #}
+
+        <div class="container containerShow">
+
+
+            <div class="miniPictureContainerShow">
+                <div class="bigPicture">
+                    <img id="expandedImg"  src="{{ asset(pictures.0)}}" onclick="fullPicture()">
+                </div>
+                <div class="fullPicture" id="fullPictureContain" >
+                
+                    <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+                        <div class="closeFullIcon">
+                        <i class="fa-solid fa-xmark" onclick="fullPictureClose()"></i>
+                    </div>
+                        <div class="carousel-inner">
+                          <div class="carousel-item active">
+                            <img id="expandedFullImg" src="{{ asset(pictures.0)}}" class="d-block " alt="{{pictures.0}}">
+                          </div>
+                       {% for picture in pictures %}
+                       <div class="carousel-item">
+                           <img src="{{ asset(picture)}}" class="d-block " alt="{{picture}}">
+                        </div>
+                        {% endfor %}
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+                          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                          <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+                          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                          <span class="visually-hidden">Next</span>
+                        </button>
+                      </div>
+                </div>
+
+                <div class="miniPictureShow">
+                    {% for picture in pictures %}
+                    <div class="miniGalleryShow">
+                        <img class="imgGalleryShow" src="{{ asset(picture)}}" alt="{{ picture}}"
+                            onclick="myFunction(this);">
+                    </div>
+                    {% endfor %}
+                </div>
+
+            </div>
+            <div class="content">
+                <div class="mb-3 mt-3 title">
+                    <h2>{{ xbox.title }}</h2>
+                </div>
+                <div class="mb-3 mt-3 generation">
+                    {% if xbox.generation == 'xboxFat' %}
+                    Xbox 360 Fat
+                    {% endif %}
+                    {% if xbox.generation == 'xboxSlim' %}
+                    Xbox 360 Slim
+                    {% endif %}
+                </div>
+                <div class="mb-3 mt-3 price">Prix : <span>{{ xbox.price }} €</span></div>
+                <div class="mb-3 mt-3 description">
+                    
+                    <p>{{ xbox.description }}</p>
+                </div>
+             
+
+                <div class="mb-3 mt-3 paypal">
+                    {% if app.user %}
+                    {% if app.user.isVerified == 1 %}
+                    {% if xbox.sold == 'SOLD' %}
+                    <div class="paypalBtn BtnSold">
+                        <p>Vendu</p>
+                    </div>
+                    {% else %}
+                    {% if xbox.id in cartProducts %}
+                    <form method="POST">
+                        <input type="hidden" value="create" name="deleteFromCart">
+                        <input type="hidden" value="{{xbox.id}}" name="deleteIdCart">
+
+                        <button class="btn btn-warning btnDelFromCart" type="submit"><i
+                            class="fa-solid fa-cart-arrow-down"></i>Retirer</button>
+                    </form>
+                    {% else %}
+                    <form method="POST">
+                        <input type="hidden" value="create" name="addToCart">
+                        <input type="hidden" value="{{xbox.id}}" name="productsId">
+
+                        <button class="btn btn-success" type="submit">Ajouter au panier</button>
+                    </form>
+                    {% endif %}
+
+
+
+                    {% endif %}
+                    {% else %}
+                    {% if xbox.sold == 'SOLD' %}
+                    <div class="paypalBtn BtnSold">
+                        <p>Vendu</p>
+                    </div>
+                    {% else %}
+                    <button class="btn btn-success btnAddCart" onclick="sweetAlertVerified()"><i
+                            class="fa-solid fa-cart-plus"></i>Ajouter au panier</button>
+                    {% endif %}
+                    {% endif %}
+                    {% else %}
+                    {% if xbox.sold == 'SOLD' %}
+                    <div class="paypalBtn BtnSold">
+                        <p>Vendu</p>
+                    </div>
+                    {% else %}
+                    <button onclick="sweetAlertConnected()" class="paypalBtn"><i class="fa-brands fa-paypal"></i>
+                        <p>Ajoutez au panier</p>
+                    </button>
+                    {% endif %}
+                    {% endif %}
+                </div>
+
+
+            </div>
+        </div>
+
+
+{# Role admin seulement #}
+{# <a href="{{ path('app_xbox_index') }}">back to list</a>
+
+<a href="{{ path('app_xbox_edit', {'id': xbox.id}) }}">edit</a> #}
+
+
+{% endblock %}

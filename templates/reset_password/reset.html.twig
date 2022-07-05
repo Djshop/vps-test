@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}DJ SHOP - Modification mot de passe
+{% endblock %}
+
+{% block body %}
+
+	<div class="showErrors showErrorsReset">
+
+
+		{% for level, messages in app.flashes %}
+			{% for message in messages %}
+				<div class="alert text-center col-6 alert-{{ level }}">
+					{{ message|raw }}
+				</div>
+			{% endfor %}
+		{% endfor %}
+	</div>
+
+	{# <div class="formInput">
+				<div class="resetForm resetErrors">
+					<h3 class="h3Reset">Renitialisation mot de passe</h3>
+	
+					{{ form_start(resetForm) }}
+					{{ form_row(resetForm.plainPassword) }}
+	
+				</div>
+	
+				<button class="btnResetRequest">Renitialiser Mot de passe</button>
+				{{ form_end(resetForm) }}
+			</div> #}
+	<div class="container containerLogin">
+		<div class="loginBody">
+			<div class="leftBody">
+				<img src="{{ asset("image/xbox-controller.jpg")}}" alt="">
+			</div>
+			<div class="rightBody">
+				<div class="formLogin">
+					<div class="headLogin">
+						<p>Renitialisation mot de passe</p>
+					</div>
+
+					<div class="formRequest formRequestReset">
+
+						{{ form_start(resetForm) }}
+						{{ form_row(resetForm.plainPassword) }}
+						<button class="btnConnexion">Renitialiser Mot de passe</button>
+						{{ form_end(resetForm) }}
+
+					</div>
+				</div>
+
+			</div>
+
+		</div>
+	</div>
+
+{% endblock %}

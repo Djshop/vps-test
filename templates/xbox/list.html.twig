@@ -1,0 +1,355 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}DJ SHOP - Stock{% endblock %}
+
+{% block body %}
+{% block javascripts %}
+<script src="{{ asset('js/stock.js')}}"></script>
+{% endblock %}
+<div class="dashboard">
+    <div class="containerDashboard">
+        <div class="dashFilter">
+            <h1 class="h1TitleStock " style="padding-top: 50px;">Liste des stocks</h1>
+            <div class="filterContainer">
+
+
+                <div id="allStockBtn" class="filterCard" onclick="allStockShow()"><i class="fa-solid fa-list-check"></i>
+                    <p>Toute les Console</p>
+                </div>
+                <div id="soldStockBtn" class="filterCard" onclick="soldStockShow()"><i
+                        class="fa-solid fa-money-check-dollar"></i>
+                    <p>Console Vendu</p>
+                </div>
+                <div id="toSellStockBtn" class="filterCard" onclick="toSellStockShow()"><i class="fa-solid fa-list"></i>
+                    <p>Console En Vente</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="containerDashboardResponsive">
+        <h1 class="h1TitleResponsive" >Liste des stocks</h1>
+        <div class="filterContainerResponsive">
+
+
+            <div id="allStockBtnResponsive" class="filterCardResponsive" onclick="allStockShowResponsive()"><i class="fa-solid fa-list-check"></i>
+                <p>Toute les Console</p>
+            </div>
+            <div id="soldStockBtnResponsive" class="filterCardResponsive" onclick="soldStockShowResponsive()"><i
+                    class="fa-solid fa-money-check-dollar"></i>
+                <p>Console Vendu</p>
+            </div>
+            <div id="toSellStockBtnResponsive" class="filterCardResponsive" onclick="toSellStockShowResponsive()"><i class="fa-solid fa-list"></i>
+                <p>Console En Vente</p>
+            </div>
+        </div>
+    </div>
+    <div class="dashboardContainerList">
+        <div class="dashList" id="allStock">
+            {% if xboxes  %}
+         
+            <div class="itemsTh">
+                <div class="th thImg">Photo</div>
+                <div class="th thTitle">Nom</div>
+                <div class="th thGeneration">Gen</div>
+                <div class="th thPrice">Prix</div>
+                <div class="th thSold">Status</div>
+                <div class="th thShow thNotResponsive"><i class="fa-solid fa-eye"></i></div>
+                <div class="th thEdit thNotResponsive"><i class="fa-solid fa-gear"></i></div>
+                <div class="th thDelete thNotResponsive"><i class="fa-solid fa-ban"></i></div>
+                <div class="th thEdit thResponsive">Action</div>
+            </div>
+            {% for xbox in xboxes %}
+            {% set xbxPic = xbox.picture|split('_') %}
+
+            <div class="items itemsStock">
+                <div class="td tdImg">
+                    <img class="listPicture" src="{{ asset(xbxPic.0) }}" alt="xbox picture">
+                </div>
+                <div class="td tdTitle">{{ xbox.title }}</div>
+
+                <div class="td tdGeneration">
+                    {% if xbox.generation == 'xboxFat'%}
+                    FAT
+                    {% elseif xbox.generation == 'xboxSlim'%}
+                    SLIM
+                    {% endif %}
+
+                </div>
+                <div class="td tdPrice">{{ xbox.price }} €</div>
+
+                <div class="td tdSold">
+                    {% if xbox.sold == 'to sell'%}
+                    <div class="btnSell"><i class="fa-solid fa-hourglass"></i>En vente</div>
+                    {% elseif xbox.sold == 'SOLD'%}
+                    <div class="btnSell btnSold"><i class="fa-solid fa-check"></i>Vendu</div>
+                    {% endif %}
+                </div>
+              
+                <a href="{{ path('app_xbox_show', {'id': xbox.id}) }}" class="td btnShow btnNotResponsive tdNotResponsive"><i
+                            class="fa-solid fa-eye"></i>OUVRIR</a>
+               <a href="{{ path('app_xbox_edit', {'id': xbox.id}) }}" class="td btnShow btnEdit btnNotResponsive tdNotResponsive"><i
+                            class="fa-solid fa-gear"></i>CONFIGURER</a>
+                <a class="td btnShow btnDelete btnNotResponsive tdNotResponsive" onclick="sweetAlertDeleteAll{{xbox.id}}()"><i
+                            class="fa-solid fa-ban "></i>SUPPRIMER</a>
+
+                <a href="{{ path('app_xbox_show', {'id': xbox.id}) }}" class="td btnShow btnResponsive tdNotResponsive"><i
+                            class="fa-solid fa-eye"></i></a>
+               <a href="{{ path('app_xbox_edit', {'id': xbox.id}) }}" class="td btnShow btnEdit btnResponsive tdNotResponsive"><i
+                            class="fa-solid fa-gear"></i></a>
+                <a class="td btnShow btnDelete btnResponsive tdNotResponsive" onclick="sweetAlertDeleteAll{{xbox.id}}()"><i
+                            class="fa-solid fa-ban "></i></a>
+
+                            <div class="td tdResponsive">
+                            <a href="{{ path('app_xbox_show', {'id': xbox.id}) }}" class="td btnShow "><i
+                            class="fa-solid fa-eye"></i>OUVRIR</a>
+                            <a href="{{ path('app_xbox_edit', {'id': xbox.id}) }}" class="td btnShow btnEdit "><i
+                            class="fa-solid fa-gear"></i>CONFIGURER</a>
+                            <a class="td btnShow btnDelete " onclick="sweetAlertDeleteAll{{xbox.id}}()"><i
+                            class="fa-solid fa-ban "></i>SUPPRIMER</a>
+                            </div>
+
+                <script>
+                    function sweetAlertDeleteAll{{xbox.id}}() {
+
+
+                        swal({
+                            title: "Are you sure?",
+                            text: "Once deleted, you will not be able to recover this imaginary file!",
+                            icon: "warning",
+                            buttons: true,
+                            dangerMode: true,
+                        })
+                            .then((willDelete) => {
+                                if (willDelete) {
+                                    window.location = "http://127.0.0.1:8000/xbox/{{xbox.id}}/delete";
+                                    swal("Poof! Your imaginary file has been deleted!", {
+                                        icon: "success",
+                                    });
+                                } else {
+                                    swal("Your imaginary file is safe!");
+                                }
+                            });
+
+                    }
+                </script>
+            </div>
+            {% endfor %}
+            {% else %} 
+            <div class="emptyListAdmin">
+                <h1>Vous n'avez aucune console</h1>
+            </div>
+            {% endif %}
+
+
+        </div>
+        <div class="dashList" id="soldStock" style="display: none!important;">
+            {% if xboxes is not empty %}
+            {% if countSold == 0 %}
+            <div class="emptyListAdmin">
+                <h1>Vous n'avez aucune console de vendu</h1>
+            </div>
+            {% else %}
+            <div class="itemsTh">
+                <div class="th thImg">Photo</div>
+                <div class="th thTitle">Nom</div>
+                <div class="th thGeneration">Gen</div>
+                <div class="th thPrice">Prix</div>
+                <div class="th thSold">Status</div>
+                <div class="th thShow thNotResponsive"><i class="fa-solid fa-eye"></i></div>
+                <div class="th thEdit thNotResponsive"><i class="fa-solid fa-gear"></i></div>
+                <div class="th thDelete thNotResponsive"><i class="fa-solid fa-ban"></i></div>
+                <div class="th thEdit thResponsive">Action</div>
+            </div>
+            {% for xbox in xboxes %}
+            {% if xbox.sold == 'SOLD' %}
+            {% set xbxPic = xbox.picture|split('_') %}
+            <div class="items itemsStock">
+                <div class="td tdImg">
+                    <img class="listPicture" src="{{ asset(xbxPic.0) }}" alt="xbox picture">
+                </div>
+                <div class="td tdTitle">{{ xbox.title }}</div>
+
+                <div class="td tdGeneration">
+                    {% if xbox.generation == 'xboxFat'%}
+                    FAT
+                    {% elseif xbox.generation == 'xboxSlim'%}
+                    SLIM
+                    {% endif %}
+
+                </div>
+                <div class="td tdPrice">{{ xbox.price }} €</div>
+                <div class="td tdSold">
+                    {% if xbox.sold == 'to sell'%}
+                    <div class="btnSell"><i class="fa-solid fa-hourglass"></i>En vente</div>
+                    {% elseif xbox.sold == 'SOLD'%}
+                    <div class="btnSell btnSold"><i class="fa-solid fa-check"></i>Vendu</div>
+                    {% endif %}
+                </div>
+           
+                <a href="{{ path('app_xbox_show', {'id': xbox.id}) }}" class="td btnShow btnNotResponsive tdNotResponsive"><i
+                            class="fa-solid fa-eye"></i>OUVRIR</a>
+                <a href="{{ path('app_xbox_edit', {'id': xbox.id}) }}" class="td btnShow btnEdit btnNotResponsive tdNotResponsive"><i
+                            class="fa-solid fa-gear"></i>CONFIGURER</a>
+               <a class="td btnShow btnDelete btnNotResponsive tdNotResponsive" onclick="sweetAlertDeleteSold{{xbox.id}}()"><i
+                            class="fa-solid fa-ban "></i>SUPPRIMER</a>
+           
+                <a href="{{ path('app_xbox_show', {'id': xbox.id}) }}" class="td btnShow btnResponsive tdNotResponsive"><i
+                            class="fa-solid fa-eye"></i></a>
+                <a href="{{ path('app_xbox_edit', {'id': xbox.id}) }}" class="td btnShow btnEdit btnResponsive tdNotResponsive"><i
+                            class="fa-solid fa-gear"></i></a>
+               <a class="td btnShow btnDelete btnResponsive tdNotResponsive" onclick="sweetAlertDeleteSold{{xbox.id}}()"><i
+                            class="fa-solid fa-ban "></i></a>
+
+                                    <div class="td tdResponsive">
+                            <a href="{{ path('app_xbox_show', {'id': xbox.id}) }}" class="td btnShow "><i
+                            class="fa-solid fa-eye"></i>OUVRIR</a>
+                            <a href="{{ path('app_xbox_edit', {'id': xbox.id}) }}" class="td btnShow btnEdit "><i
+                            class="fa-solid fa-gear"></i>CONFIGURER</a>
+                            <a class="td btnShow btnDelete " onclick="sweetAlertDeleteAll{{xbox.id}}()"><i
+                            class="fa-solid fa-ban "></i>SUPPRIMER</a>
+                            </div>
+
+                <script>
+                    function sweetAlertDeleteSold{ { xbox.id } } () {
+
+
+                        swal({
+                            title: "Are you sure?",
+                            text: "Once deleted, you will not be able to recover this imaginary file!",
+                            icon: "warning",
+                            buttons: true,
+                            dangerMode: true,
+                        })
+                            .then((willDelete) => {
+                                if (willDelete) {
+                                    window.location = "http://127.0.0.1:8000/xbox/{{xbox.id}}/delete";
+                                    swal("Poof! Your imaginary file has been deleted!", {
+                                        icon: "success",
+                                    });
+                                } else {
+                                    swal("Your imaginary file is safe!");
+                                }
+                            });
+
+                    }
+                </script>
+            </div>
+            {% endif %}
+            {% endfor %}
+            {% endif %}
+            {% else %} 
+            <div class="emptyListAdmin">
+                <h1>Vous n'avez aucune console de vendu</h1>
+            </div>
+            {% endif %}
+
+
+        </div>
+        <div class="dashList" id="toSellStock" style="display: none!important;">
+            {% if xboxes %}
+            {% if countSell == 0 %}
+            <div class="emptyListAdmin">
+                <h1>Vous n'avez aucune console en vente</h1>
+            </div>
+            {% else %}
+            <div class="itemsTh">
+                <div class="th thImg">Photo</div>
+                <div class="th thTitle">Nom</div>
+                <div class="th thGeneration">Gen</div>
+                <div class="th thPrice">Prix</div>
+                <div class="th thSold">Status</div>
+                <div class="th thShow thNotResponsive"><i class="fa-solid fa-eye"></i></div>
+                <div class="th thEdit thNotResponsive"><i class="fa-solid fa-gear"></i></div>
+                <div class="th thDelete thNotResponsive"><i class="fa-solid fa-ban"></i></div>
+                <div class="th thEdit thResponsive">Action</div>
+            </div>
+            {% for xbox in xboxes %}
+            {% if xbox.sold == 'to sell' %}
+            {% set xbxPic = xbox.picture|split('_') %}
+
+            <div class="items itemsStock">
+                <div class="td tdImg">
+                    <img class="listPicture" src="{{ asset(xbxPic.0) }}" alt="xbox picture">
+                </div>
+                <div class="td tdTitle">{{ xbox.title }}</div>
+
+                <div class="td tdGeneration">
+                    {% if xbox.generation == 'xboxFat'%}
+                    FAT
+                    {% elseif xbox.generation == 'xboxSlim'%}
+                    SLIM
+                    {% endif %}
+
+                </div>
+                <div class="td tdPrice">{{ xbox.price }} €</div>
+
+                <div class="td tdSold">
+                    {% if xbox.sold == 'to sell'%}
+                    <div class="btnSell"><i class="fa-solid fa-hourglass"></i>En vente</div>
+                    {% elseif xbox.sold == 'SOLD'%}
+                    <div class="btnSell btnSold"><i class="fa-solid fa-check"></i>Vendu</div>
+                    {% endif %}
+                </div>
+           
+               <a href="{{ path('app_xbox_show', {'id': xbox.id}) }}" class="td btnShow btnNotResponsive tdNotResponsive"><i
+                            class="fa-solid fa-eye"></i>OUVRIR</a>
+               <a href="{{ path('app_xbox_edit', {'id': xbox.id}) }}" class="td btnShow btnEdit btnNotResponsive tdNotResponsive"><i
+                            class="fa-solid fa-gear"></i>CONFIGURER</a>
+               <a class="td btnShow btnDelete btnNotResponsive tdNotResponsive" onclick="sweetAlertDeleteToSell{{xbox.id}}()"><i
+                            class="fa-solid fa-ban "></i>SUPPRIMER</a>
+
+               <a href="{{ path('app_xbox_show', {'id': xbox.id}) }}" class="td btnShow btnResponsive tdNotResponsive"><i
+                            class="fa-solid fa-eye"></i></a>
+               <a href="{{ path('app_xbox_edit', {'id': xbox.id}) }}" class="td btnShow btnEdit btnResponsive tdNotResponsive"><i
+                            class="fa-solid fa-gear"></i></a>
+               <a class="td btnShow btnDelete btnResponsive tdNotResponsive" onclick="sweetAlertDeleteToSell{{xbox.id}}()"><i
+                            class="fa-solid fa-ban "></i></a>
+
+                                    <div class="td tdResponsive">
+                            <a href="{{ path('app_xbox_show', {'id': xbox.id}) }}" class="td btnShow "><i
+                            class="fa-solid fa-eye"></i>OUVRIR</a>
+                            <a href="{{ path('app_xbox_edit', {'id': xbox.id}) }}" class="td btnShow btnEdit "><i
+                            class="fa-solid fa-gear"></i>CONFIGURER</a>
+                            <a class="td btnShow btnDelete " onclick="sweetAlertDeleteAll{{xbox.id}}()"><i
+                            class="fa-solid fa-ban "></i>SUPPRIMER</a>
+                            </div>
+                <script>
+                    function sweetAlertDeleteToSell{ { xbox.id } } (){
+
+
+                        swal({
+                            title: "Are you sure?",
+                            text: "Once deleted, you will not be able to recover this imaginary file!",
+                            icon: "warning",
+                            buttons: true,
+                            dangerMode: true,
+                        })
+                            .then((willDelete) => {
+                                if (willDelete) {
+                                    window.location = "http://127.0.0.1:8000/xbox/{{xbox.id}}/delete";
+                                    swal("Poof! Your imaginary file has been deleted!", {
+                                        icon: "success",
+                                    });
+                                } else {
+                                    swal("Your imaginary file is safe!");
+                                }
+                            });
+
+                    }
+                </script>
+            </div>
+            {% endif %}
+            {% endfor %}
+            {% endif %}
+            {% else %} 
+            <div class="emptyListAdmin">
+                <h1>Vous n'avez aucune console en vente</h1>
+            </div>
+            {% endif %}
+
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}DJ SHOP - Moyens de paiments{% endblock %}
+
+{% block body %}
+
+
+<div class="container containerRgh">
+		<div class="titleRgh">Moyens de paiments</div>
+        <div class="bodyRgh">
+           <div class="smallRgh">
+        <p>Le seul et unique moyent de paiment du site DJ shop est en passant par Paypal.</p>
+        <p>Cela nous permets d'avoir un suivi de nos ventes personnaliser a nos besoins, et de profiter des avantages qu'offres les paiment Paypal comme l'ajout de n'importe quel carte de paiement ou encore le paiment en 4 fois.</p>
+        </div>
+        <div class="logoPayment">
+        <img src="{{ asset('image/paypal.png') }}" alt="">
+        
+        </div>
+        <br>
+        <hr>
+		<div class="contentRgh">
+			<div class="paraRgh">
+				<div class="titleParaRgh">Carte de Paiment Accepté par Paypal</div>
+				<div class="contentParaRgh">
+                <ul>
+                <li>MasterCard</li>
+                <li>Visa</li>
+                <li>American Express</li>
+                <li>Carte Bancaire Nationale</li>
+                <li>...</li>
+                </ul>
+                </div>
+			</div>
+			<div class="paraRgh">
+				<div class="titleParaRgh">Paiment en 4 fois via Paypal</div>
+				<div class="contentParaRgh">
+                <p>Pour bénéficier du paiment en 4 fois via paypal il vous faut au préalable avoir une carte ou compte enregistré a votre compte paypal. Paypal vous facturera 2.1% de frais en plus sur votre commande. </p>
+          
+                </div>
+			</div>
+			
+		</div>
+        </div>
+     
+
+	</div>
+
+
+{% endblock %}
